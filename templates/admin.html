@@ -1,0 +1,62 @@
+{% extends 'base.html' %} {% block content %}
+<!-- Flash Massage -->
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul>
+      {% for message in messages %}
+        <li>{{ message }}</li>
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+<h1>Admin</h1>
+
+
+
+
+<div class="section-admin">
+  
+<a style="background-color: var(--primary-color); border-radius: 0.5rem; padding: .2rem .6rem; " type="button" href="{{ url_for('main.create_account') }}">Create Account</a>
+  <h2>Accounts</h2>
+<ul>
+  <li>Username</li>
+  <li>Password</li>
+  <li>Update</li>
+  <li>Delete</li>
+</ul>
+
+  <hr>
+
+{% for user in users %}
+<ul><li>{{ user.username }}</li>
+  <li>{{ user.password }}</li> 
+  <a href="{{ url_for('main.update_account', id=user.id) }}">Update</a>
+  <a href="{{ url_for('main.delete_account', id=user.id) }}">Delete</a></ul>
+
+{% endfor %}
+</div>
+
+<div class="section-admin">
+  <a style="background-color: var(--primary-color); border-radius: 0.5rem; padding: .2rem .6rem; " type="button" href="{{ url_for('main.add_medicine') }}">add Medicine</a>
+  <h2>Medicine</h2>
+  <ul>
+    <li>Name</li>
+    <li>Id</li>
+    <li>Update</li>
+    <li>Delete</li>
+  </ul>
+  <hr>
+  {% for medicine in medicines %}
+  <ul>
+    <li>{{ medicine.name }}</li>
+    <li>{{ medicine.id }}</li>
+    <a href="{{ url_for('main.update_medicine', id=medicine.id) }}">Update</a>
+    <a href="{{ url_for('main.delete_medicine', id=medicine.id) }}">Delete</a>
+  </ul>
+  {% endfor %}
+</div>
+
+
+{% endblock %}
