@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from db import db
-from models import User, MedicineList, AddPatient, Wards
+from models import User, MedicineList, AddPatient, Wards, PatientMedicine
 from datetime import datetime
 from flask_login import login_user, logout_user, login_required
 
@@ -76,7 +76,7 @@ def delete_account(id):
 @main_blueprint.route('/add_medicine', methods=['GET', 'POST'])
 def add_medicine():
     if request.method == 'POST':
-        name = request.form['name']
+        name = request.form.get('name')
         medicine = MedicineList(name=name)
         db.session.add(medicine)
         db.session.commit()
@@ -190,13 +190,62 @@ def get_patient():
         return redirect(url_for('main.index'))
 
 
-@main_blueprint.route('/add_medicine' , methods=['POST'])
+@main_blueprint.route('/add_medicine_to_patient', methods=['POST'])
 @login_required
 def add_medicine_to_patient():
     patient_id = request.form['patient_id']
     medicine_id = request.form['medicine']
+    quantity = request.form['quantity']
+
+    try:
+        quantity = int(quantity)
+    except ValueError:
+        flash('Invalid quantity provided', 'error')
+        return redirect(url_for('main.get_patient'))
+
     patient = AddPatient.query.get(patient_id)
-    patient.medicines.append(MedicineList.query.get(medicine_id))
+    medicine = MedicineList.query.get(medicine_id)
+
+    if not patient or not medicine:
+        flash('Invalid patient or medicine ID', 'error')
+        return redirect(url_for('main.get_patient'))
+
+    patient_medicine = PatientMedicine.query.filter_by(patient_id=patient_id, medicine_id=medicine_id).first()
+
+    if patient_medicine:
+        patient_medicine.quantity += quantity
+    else:
+        patient_medicine = PatientMedicine(patient_id=patient_id, medicine_id=medicine_id, quantity=quantity)
+        db.session.add(patient_medicine)
+
     db.session.commit()
     flash('Medicine added to patient!', 'success')
     return redirect(url_for('main.get_patient'))
+
+
+@main_blueprint.route('/delete_medicine_from_patient/<int:patient_id>/<int:medicine_id>', methods=['POST'])
+@login_required
+def delete_medicine_from_patient(patient_id, medicine_id):
+    patient_medicine = PatientMedicine.query.filter_by(patient_id=patient_id, medicine_id=medicine_id).first()
+    
+    if patient_medicine:
+        db.session.delete(patient_medicine)
+        db.session.commit()
+        flash('Medicine deleted from patient!', 'success')
+    else:
+        flash('Medicine not found for the patient!', 'error')
+    
+    return redirect(url_for('main.get_patient'))
+
+
+
+@main_blueprint.route('/get_ward_patients', methods=['POST'])
+@login_required
+def get_ward_patients():
+    ward_id = request.form['ward_id']
+    ward = Wards.query.get(ward_id)
+    if not ward:
+        flash('Invalid ward ID', 'error')
+        return redirect(url_for('main.index'))
+    patients = AddPatient.query.filter_by(ward_id=ward_id).all()
+    return render_template('ward_patients.html', patients=patients, ward=ward)

@@ -126,11 +126,24 @@
 </div>
 
 <div class="section-admin">
-  <a style="background-color: var(--primary-color); border-radius: 0.5rem; padding: .2rem .6rem; " type="button" href="{{ url_for('main.get_patient') }}">Search Patient</a>
   <h2>Search Patient</h2>
   <form action="get_patient" method="POST">
     <label for="mrn_number">MRN Number</label>
     <input type="text" name="mrn_number" required placeholder="Enter MRN Number..." id="mrn_number">
+    <button type="submit">Search</button>
+  </form>
+</div>
+
+<!-- Search persons in special ward -->
+<div class="section-admin">
+  <h2>Search Patients in Ward</h2>
+  <form action="get_ward_patients" method="POST">
+    <label for="ward_id">Ward</label>
+    <select name="ward_id" id="ward_id">
+      {% for ward in wards %}
+      <option value="{{ ward.id }}">{{ ward.name }}</option>
+      {% endfor %}
+    </select>
     <button type="submit">Search</button>
   </form>
 </div>

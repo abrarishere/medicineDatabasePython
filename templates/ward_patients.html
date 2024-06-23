@@ -1,0 +1,51 @@
+{% extends 'base.html' %} {% block content %}
+<!-- Flash Message -->
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul>
+      {% for message in messages %}
+        <li>{{ message }}</li>
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+<h1>Ward Patients</h1>
+<div class='section-admin'>
+<h2> Ward Name : {{ ward.name }} </h2>
+
+  {% if patients %}
+  <table style="color: white;">
+    <tr>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Father Name</th>
+      <th>Age</th>
+      <th>Phone Number</th>
+      <th>MRN Number</th>
+      <th>CNIC</th>
+      <th>Date</th>
+      <th>Actions</th>
+    </tr>
+    {% for patient in patients %}
+    <tr>
+      <td>{{ patient.first_name }}</td>
+      <td>{{ patient.last_name }}</td>
+      <td>{{ patient.father_name }}</td>
+      <td>{{ patient.age }}</td>
+      <td>{{ patient.phone_number }}</td>
+      <td>{{ patient.mrn_number }}</td>
+      <td>{{ patient.cnic }}</td>
+      <td>{{ patient.date }}</td>
+      <td>
+        <a onclick="window.prompt('Have you copied MRN! Copy it' , '{{patient.mrn_number}}')"  href='{{ url_for('main.index') }}'>Medicines</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+  <h2>No Patients in this ward</h2>
+  {% endif %}
+</div>
+{% endblock %}

@@ -24,7 +24,10 @@ def create_app():
 
     app.register_blueprint(main_blueprint)
 
-
+    
+    @app.errorhandler(405)
+    def method_not_allowed(e):
+        return '''<h1><a href='/''>you have to go</a></h1>''', 405
     return app
 
 app = create_app()
