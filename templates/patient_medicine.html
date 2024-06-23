@@ -1,0 +1,71 @@
+{% extends 'base.html' %} {% block content %}
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul>
+      {% for message in messages %}
+        <li>{{ message }}</li>
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+  <ul>
+    <li>First Name</li>
+    <li>Last Name</li>
+    <li>Father Name</li>
+    <li>Age</li>
+    <li>Phone Number</li>
+    <li>MRN Number</li>
+    <li>CNIC</li>
+    <li>Ward</li>
+    <li>Date</li>
+  </ul>
+  <hr>
+
+
+  <ul>
+    <li>{{ patient.first_name }}</li>
+    <li>{{ patient.last_name }}</li>
+    <li>{{ patient.father_name }}</li>
+    <li>{{ patient.age }}</li>
+    <li>{{ patient.phone_number }}</li>
+    <li>{{ patient.mrn_number }}</li>
+    <li>{{ patient.cnic }}</li>
+    <li>{{ ward.name }}</li>
+    <li>{{ patient.date }}</li>
+  </ul>
+
+  <form method="POST">
+  <select name="medicine">
+    {% for medicine in medicines %}
+    <option value="{{ medicine.id }}">{{ medicine.name }}</option>
+    {% endfor %}
+  </select>
+  <input type="number" name="quantity" placeholder="Quantity">
+  <input type="date" name="date" placeholder="Date">
+  <input type="submit" value="Add Medicine">
+</form>
+<!-- Lets show all the medicines that are assigned to this patient -->
+<h2>Medicines</h2>
+<ul>
+  <li>Medicine</li>
+  <li>Quantity</li>
+  <li>Date</li>
+  <li>Update</li>
+  <li>Delete</li>
+</ul>
+<hr>
+
+<!-- @main_blueprint.route('/add_medicine' , methods=['POST']) -->
+<!-- @login_required -->
+<!-- def add_medicine_to_patient(): -->
+<!--     patient_id = request.form['patient_id'] -->
+<!--     medicine_id = request.form['medicine'] -->
+<!--     patient = AddPatient.query.get(patient_id) -->
+<!--     patient.medicines.append(MedicineList.query.get(medicine_id)) -->
+<!--     db.session.commit() -->
+<!--     flash('Medicine added to patient!', 'success') -->
+<!--     return redirect(url_for('main.get_patient')) -->
+
+{% endblock %}

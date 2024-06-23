@@ -1,12 +1,12 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from db import db
-from models import User, MedicineList, AddPatient, PatientMedicine
+from models import User, MedicineList, AddPatient, Wards
 from datetime import datetime
 from flask_login import login_user, logout_user, login_required
 
 main_blueprint = Blueprint('main', __name__)
 
-@main_blueprint.route('/')
+@main_blueprint.route('/', methods=['GET', 'POST'])
 @login_required
 def index():
     return render_template('index.html')
@@ -22,6 +22,7 @@ def login():
             login_user(user)
             flash('You have been logged in!', 'success')
             if user.username == 'admin':
+                user.is_admin = True
                 return redirect(url_for('main.admin'))
             return redirect(url_for('main.index'))
         else:
@@ -37,7 +38,7 @@ def logout():
 @main_blueprint.route('/admin' , methods=['GET', 'POST'])
 @login_required
 def admin():
-    return render_template('admin.html', users=User.query.all(), medicines=MedicineList.query.all(), patients=AddPatient.query.all(), patient_medicines=PatientMedicine.query.all())
+    return render_template('admin.html', users=User.query.all(), medicines=MedicineList.query.all(), wards=Wards.query.all(), patients=AddPatient.query.all())
 
 @main_blueprint.route('/create_account', methods=['GET', 'POST'])
 def create_account():
@@ -100,3 +101,102 @@ def delete_medicine(id):
     db.session.commit()
     flash('Medicine deleted!', 'success')
     return redirect(url_for('main.admin'))
+
+
+@main_blueprint.route('/add_ward', methods=['GET', 'POST'])
+def add_ward():
+    if request.method == 'POST':
+        name = request.form['name']
+        ward = Wards(name=name)
+        db.session.add(ward)
+        db.session.commit()
+        flash('Ward added!', 'success')
+        return redirect(url_for('main.add_ward'))
+    return render_template('add_ward.html')
+
+@main_blueprint.route('/update_ward/<int:id>', methods=['GET', 'POST'])
+def update_ward(id):
+    ward = Wards.query.get(id)
+    if request.method == 'POST':
+        ward.name = request.form['name']
+        db.session.commit()
+        flash('Ward updated!', 'success')
+        return redirect(url_for('main.admin'))
+    return render_template('update_ward.html', ward=ward)
+
+@main_blueprint.route('/delete_ward/<int:id>')
+def delete_ward(id):
+    ward = Wards.query.get(id)
+    db.session.delete(ward)
+    db.session.commit()
+    flash('Ward deleted!', 'success')
+    return redirect(url_for('main.admin'))
+
+@main_blueprint.route('/add_patient', methods=['GET', 'POST'])
+def add_patient():
+    if request.method == 'POST':
+        age = request.form['age']
+        father_name = request.form['father_name']
+        mrn_number = request.form['mrn_number']
+        cnic = request.form['cnic']
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        phone_number = request.form['phone_number']
+        ward_id = request.form['ward']
+        date = datetime.utcnow()
+        patient = AddPatient(age=age, father_name=father_name, mrn_number=mrn_number, cnic=cnic, first_name=first_name, last_name=last_name, phone_number=phone_number, ward_id=ward_id, date=date)
+        db.session.add(patient)
+        db.session.commit()
+        flash('Patient added!', 'success')
+        return redirect(url_for('main.add_patient'))
+    return render_template('add_patient.html', wards=Wards.query.all())
+
+@main_blueprint.route('/update_patient/<int:id>', methods=['GET', 'POST'])
+def update_patient(id):
+    patient = AddPatient.query.get(id)
+    if request.method == 'POST':
+        patient.age = request.form['age']
+        patient.father_name = request.form['father_name']
+        patient.mrn_number = request.form['mrn_number']
+        patient.cnic = request.form['cnic']
+        patient.first_name = request.form['first_name']
+        patient.last_name = request.form['last_name']
+        patient.phone_number = request.form['phone_number']
+        patient.ward_id = request.form['ward']
+        db.session.commit()
+        flash('Patient updated!', 'success')
+        return redirect(url_for('main.admin'))
+    return render_template('update_patient.html', patient=patient, wards=Wards.query.all())
+
+@main_blueprint.route('/delete_patient/<int:id>')
+def delete_patient(id):
+    patient = AddPatient.query.get(id)
+    db.session.delete(patient)
+    db.session.commit()
+    flash('Patient deleted!', 'success')
+    return redirect(url_for('main.admin'))
+
+
+
+@main_blueprint.route('/get_patient', methods=['POST'])
+@login_required
+def get_patient():
+    mrn_number = request.form['mrn_number']
+    patient = AddPatient.query.filter_by(mrn_number=mrn_number).first()
+    if patient:
+        return render_template('patient_medicine.html', patient=patient, medicines=MedicineList.query.all(), ward=Wards.query.get(patient.ward_id))
+    else:
+        flash('Patient not found', 'danger')
+        return redirect(url_for('main.index'))
+
+
+@main_blueprint.route('/add_medicine' , methods=['POST'])
+@login_required
+def add_medicine_to_patient():
+    patient_id = request.form['patient_id']
+    medicine_id = request.form['medicine']
+    patient = AddPatient.query.get(patient_id)
+    patient.medicines.append(MedicineList.query.get(medicine_id))
+    db.session.commit()
+    flash('Medicine added to patient!', 'success')
+    return redirect(url_for('main.get_patient'))

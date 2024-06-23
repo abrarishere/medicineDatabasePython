@@ -164,11 +164,15 @@ ul {
 .section-admin{
   background-color: var(--background-dark-grey);
   padding: 1rem;
+  width: 100%;
   margin: 2rem 0;
 }
 
 @media screen and (max-width: 768px) {
+  h1 {
+    font-size: 1.5rem;
+  }
   ul {
-    font-size: 0.6rem;
+    font-size: 0.8rem;
   }
 }

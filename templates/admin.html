@@ -32,8 +32,13 @@
 {% for user in users %}
 <ul><li>{{ user.username }}</li>
   <li>{{ user.password }}</li> 
+  {% if user.is_admin %}
+  <li>Can't delete Admin</li>
+  {% else %}
   <a href="{{ url_for('main.update_account', id=user.id) }}">Update</a>
-  <a href="{{ url_for('main.delete_account', id=user.id) }}">Delete</a></ul>
+  <a href="{{ url_for('main.delete_account', id=user.id) }}">Delete</a>
+  {% endif %}
+</ul>
 
 {% endfor %}
 </div>
@@ -58,5 +63,76 @@
   {% endfor %}
 </div>
 
+
+
+<div class="section-admin">
+  <a style="background-color: var(--primary-color); border-radius: 0.5rem; padding: .2rem .6rem; " type="button" href="{{ url_for('main.add_ward') }}">Add wards</a>
+  <h2>Wards</h2>
+  <ul>
+    <li>Name</li>
+    <li>Id</li>
+    <li>Update</li>
+    <li>Delete</li>
+  </ul>
+  <hr>
+  {% for ward in wards %}
+  <ul>
+    <li>{{ ward.name }}</li>
+    <li>{{ ward.id }}</li>
+    <a href="{{ url_for('main.update_ward', id=ward.id) }}">Update</a>
+    <a href="{{ url_for('main.delete_ward', id=ward.id) }}">Delete</a>
+  </ul>
+  {% endfor %}
+</div>
+
+
+
+<div class="section-admin"> 
+  <a style="background-color: var(--primary-color); border-radius: 0.5rem; padding: .2rem .6rem; " type="button" href="{{ url_for('main.add_patient') }}">Add Patient</a>
+  <h2>Patients</h2>
+  <ul>
+    <li>First Name</li>
+    <li>Last Name</li>
+    <li>Father Name</li>
+    <li>Age</li>
+    <li>Phone Number</li>
+    <li>MRN Number</li>
+    <li>CNIC</li>
+    <li>Ward</li>
+    <li>Date</li>
+    <li>Update</li>
+    <li>Delete</li>
+  </ul>
+  <hr>
+  {% for patient in patients %}
+  <ul>
+    <li>{{ patient.first_name }}</li>
+    <li>{{ patient.last_name }}</li>
+    <li>{{ patient.father_name }}</li>
+    <li>{{ patient.age }}</li>
+    <li>{{ patient.phone_number }}</li>
+    <li>{{ patient.mrn_number }}</li>
+    <li>{{ patient.cnic }}</li>
+    {% for ward in wards %}
+    {% if ward.id == patient.ward_id %}
+    <li>{{ ward.name }}</li>
+    {% endif %}
+    {% endfor %}
+    <li>{{ patient.date }}</li>
+    <a href="{{ url_for('main.update_patient', id=patient.id) }}">Update</a>
+    <a href="{{ url_for('main.delete_patient', id=patient.id) }}">Delete</a>
+  </ul>
+  {% endfor %}
+</div>
+
+<div class="section-admin">
+  <a style="background-color: var(--primary-color); border-radius: 0.5rem; padding: .2rem .6rem; " type="button" href="{{ url_for('main.get_patient') }}">Search Patient</a>
+  <h2>Search Patient</h2>
+  <form action="get_patient" method="POST">
+    <label for="mrn_number">MRN Number</label>
+    <input type="text" name="mrn_number" required placeholder="Enter MRN Number..." id="mrn_number">
+    <button type="submit">Search</button>
+  </form>
+</div>
 
 {% endblock %}

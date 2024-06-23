@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %} {% block content %}
 <!-- Flash Message -->
 {% with messages = get_flashed_messages() %} {% if messages %}
@@ -10,13 +11,17 @@
   {% endfor %}
 </ul>
 {% endif %} {% endwith %}
-<h1>Add Medicine</h1>
+<h1>Update Ward</h1>
 <form method="POST">
   <label for="name">Name</label>
-  <input type="text" name="name" id="name" required />
-  <button type="submit">Add Medicine</button>
+  <input
+    type="text"
+    name="name"
+    id="name"
+    value="{{ ward.name }}"
+    required
+  />
+  <button type="submit">Update Ward</button>
 </form>
-
-<a href="{{ url_for('main.admin')}}">⬅Back</a>
 
 {% endblock %}

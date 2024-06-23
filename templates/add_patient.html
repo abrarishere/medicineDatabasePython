@@ -1,0 +1,32 @@
+{% extends 'base.html' %} {% block content %}
+<h1>Add Patient</h1>
+<div class="section-admin">
+  <form action="/add_patient" method="POST">
+    <label for="first_name">First Name</label>
+    <input type="text" name="first_name" required placeholder="Enter First Name...   ">
+    <label for="last_name">Last Name</label>
+    <input type="text" name="last_name" required placeholder="Enter Last Name...   ">
+    <label for="father_name">Father Name</label>
+    <input type="text" name="father_name" placeholder="Enter Father Name...   ">
+    <label for="age">Age</label>
+    <input type="text" name="age" required placeholder="Enter Age...   ">
+    <label for="phone_number">Phone Number</label>
+    <input type="text" name="phone_number" required placeholder="Enter Phone Number...   ">
+    <label for="mrn_number">MRN Number</label>
+    <input type="text" name="mrn_number" required placeholder="Enter MRN Number...   ">
+    <label for="cnic">CNIC</label>
+    <input type="text" name="cnic" required placeholder="Enter CNIC...   ">
+    <label for="date">Date</label>
+    <input type="date" name="date" placeholder="Enter Date...   ">
+  <label for="ward">Ward</label>
+  <select name="ward" id="ward">
+    {% for ward in wards %}
+    <option value="{{ ward.id }}">{{ ward.name }}</option>
+    {% endfor %}
+  </select>
+  <button type="submit">Add Patient</button>
+  </form>
+
+<a href="{{ url_for('main.admin') }}">⬅Back</a>
+</div>
+{% endblock %}
