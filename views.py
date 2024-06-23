@@ -220,7 +220,7 @@ def add_medicine_to_patient():
 
     db.session.commit()
     flash('Medicine added to patient!', 'success')
-    return redirect(url_for('main.get_patient'))
+    return redirect(url_for('main.get_patient', mrn_number=patient.mrn_number))
 
 
 @main_blueprint.route('/delete_medicine_from_patient/<int:patient_id>/<int:medicine_id>', methods=['POST'])
@@ -235,7 +235,8 @@ def delete_medicine_from_patient(patient_id, medicine_id):
     else:
         flash('Medicine not found for the patient!', 'error')
     
-    return redirect(url_for('main.get_patient'))
+    patient = AddPatient.query.get(patient_id)
+    return redirect(url_for('main.get_patient', mrn_number=patient.mrn_number))
 
 
 
