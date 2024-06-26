@@ -1,0 +1,101 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+
+    <div class="container px-6 py-8 mx-auto">
+        <div class="mt-4">
+            <div class="flex flex-wrap -mx-6">
+                <div class="w-full px-6 sm:w-1/2 xl:w-1/3">
+                    <div class="flex items-center px-5 py-6 bg-white rounded-md shadow-sm">
+                        <div class="p-3 bg-indigo-600 bg-opacity-75 rounded-full">
+                          <i class="fas fa-users text-white"></i>
+                        </div>
+
+                        <div class="mx-5">
+                            <!-- Calculate length of users -->
+                            <h4 class="text-2xl font-semibold text-gray-700">{{ users|length }}</h4>
+                            <div class="text-gray-500">Users</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8">
+
+        </div>
+
+        <div class="flex flex-col mt-8">
+            <div class="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+                <div
+                    class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow sm:rounded-lg">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr>
+                                <th
+                                    class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                                       Username  </th>
+                                <th
+                                    class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                                    Password</th>
+                                <th
+                                    class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                                    Status</th>
+
+                                <th
+                                    class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                                  Last Seen</th>
+                                <th
+                                    class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                                    Date</th>
+                                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
+                            </tr>
+                        </thead>
+
+                        <tbody class="bg-white">
+                        {% for user in users %}
+                            <tr>
+                                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                    <div class="flex items-center">
+                                        <div class="ml-4">
+                                            <div class="text-sm font-medium leading-5 text-gray-900">{{ user.username }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                    <div class="text-sm leading-5 text-gray-900">{{ user.password }}</div>
+                                </td>
+
+                                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                    <span
+                  class="inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full">{{ user.status }}</span>
+                                </td>
+
+                                <td
+                                    class="px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200">
+                                  {{ user.last_seen }}</td>
+
+                                <td
+                                    class="px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200">
+                                  {{ user.date_created }}</td>
+                                <td
+                                    class="px-6 py-4 text-sm font-medium leading-5 text-right whitespace-no-wrap border-b border-gray-200">
+                                  <a class="text-indigo-600 hover:text-indigo-900" href="{{ url_for('admin.update_user', id=user.id) }}">Edit</a>
+                                  <a class="text-indigo-600 hover:text-indigo-900" href="{{ url_for('admin.delete_user', id=user.id) }}">Delete</a>
+                                </td>
+                            </tr>
+                          {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="mt-8">
+            <div class="flex justify-end">
+              <a href="{{ url_for('admin.create_user') }}"
+                    class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-indigo-600 border border-transparent rounded-md active:bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:shadow-outline-indigo">
+                    Create User
+                </a>
+            </div>
+    </div>
+{% endblock %}

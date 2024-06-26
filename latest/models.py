@@ -11,5 +11,9 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(150))
     is_admin = db.Column(db.Boolean, default=False)
     date_created = db.Column(db.DateTime(timezone=True), default=func.now())
+    status = db.Column(db.String(150), default='online')
+    last_seen = db.Column(db.DateTime(timezone=True), default=func.now())
+
+
 
 

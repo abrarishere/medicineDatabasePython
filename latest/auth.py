@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 from db import db
 from models import User
-from views import views, create_admin
+from views import create_admin, views
 
 auth = Blueprint('auth', __name__)
 
@@ -22,8 +22,7 @@ def login():
             if user.password == password:
                 flash('Logged in successfully!', category='success')
                 login_user(user, remember=True)
-                if username == 'admin':
-                    user.is_admin = True
+                if user.is_admin:
                     return redirect(url_for('views.admin'))
                 else:
                     return redirect(url_for('views.home'))
