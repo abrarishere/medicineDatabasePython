@@ -1,0 +1,9 @@
+flask
+flask-login
+flask-mail
+flask-migrate
+flask-moment
+flask-openid
+flask-pagedown
+flask-sqlalchemy
+requests

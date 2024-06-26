@@ -1,7 +1,12 @@
+import random
+
 from flask import Flask
-from flask_login import LoginManager
-from views import views
+from flask_login import LoginManager, login_user
+
+from auth import auth
 from db import db
+from models import User
+from views import views
 
 
 def create_app():
@@ -11,11 +16,15 @@ def create_app():
     app.config['SECRET_KEY'] = 'secret'
 
     app.register_blueprint(views, url_prefix='/')
+    app.register_blueprint(auth, url_prefix='/')
 
 
-    # login_manager = LoginManager()
-    # login_manager.login_view = 'views.login'
-    # login_manager.init_app(app)
+    login_manager = LoginManager()
+    login_manager.login_view = 'auth.login'
+    login_manager.init_app(app)
+    @login_manager.user_loader
+    def load_user(id):
+        return User.query.get(int(id))
 
 
     with app.app_context():
@@ -28,4 +37,5 @@ def create_app():
 app= create_app()
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=random.randint(2000, 9000))
+
