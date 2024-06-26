@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title  }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  {% block head %}
+  {% endblock %}
+
+</head>
+<body>
+
+    <header>
+      <nav>
+        <ul>
+          <li><a href="{{ url_for('views.home') }}">Home</a></li>
+          <li><a href="{{ url_for('views.login') }}">Login</a></li>
+        </ul>
+      </nav>
+    </header>
+
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash">
+          {% for message in messages %}
+          {% if message.category == 'error' %}
+            <div class="error-flash">{{ message }}</div>
+            <a onclick='this.parentElement.style.display = "none"' class='flash-close'>&times;</a>
+          {% else %}
+            <div class="success-flash">{{ message }}</div>
+            <a onclick='this.parentElement.style.display = "none"' class='flash-close'>&times;</a>
+          {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+  
+    <main class="container">
+      {% block content %}
+      {% endblock %}
+    </main>
+
+</body>
+</html>

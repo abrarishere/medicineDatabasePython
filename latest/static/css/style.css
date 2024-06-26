@@ -1,0 +1,108 @@
+:root {
+  --yellow: #ffd700;
+  --black: #000000;
+  --white: #ffffff;
+  --grey: #808080;
+  --red: #ff0000;
+  --green: #008000;
+}
+
+/* Reset CSS */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  color: var(--white);
+  background-color: var(--black);
+}
+
+a {
+  text-decoration: none;
+  color: var(--white);
+}
+
+a:hover {
+  color: var(--yellow);
+}
+
+li {
+  list-style: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+input {
+  border: none;
+  outline: none;
+}
+
+/* Flash Message */
+
+.flash {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--yellow);
+  color: var(--black);
+  z-index: 1000;
+}
+
+.flash-close {
+  margin-left: 1rem;
+  color: var(--black);
+}
+
+.error-flash {
+  background-color: var(--red);
+  padding: 1rem;
+}
+
+.success-flash {
+  background-color: var(--green);
+  padding: 1rem;
+}
+
+/* Global Styles */
+
+.container {
+  max-width: 1200px;
+  margin: 10px auto;
+  padding: 1rem;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+  width: 100%;
+  position: fixed;
+  z-index: 1000;
+  transition: background-color 0.5s;
+  background-color: transparent;
+}
+
+nav:hover {
+  background-color: var(--black);
+}
+
+nav ul {
+  display: flex;
+}
+
+nav ul li {
+  margin: 0 1rem;
+}
