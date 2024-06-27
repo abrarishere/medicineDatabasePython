@@ -18,3 +18,4 @@ window.addEventListener('resize', () => {
         backdrop.classList.add('hidden');
     }
 });
+
