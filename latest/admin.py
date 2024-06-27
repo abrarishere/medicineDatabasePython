@@ -1,19 +1,29 @@
-from flask import (Blueprint, Flask, flash, redirect, render_template, request,
-                   url_for)
-from flask_login import current_user, login_required, login_user, logout_user
-from flask_sqlalchemy import SQLAlchemy
-
 from db import db
+from flask import (Blueprint, Flask, flash, jsonify, redirect, render_template,
+                   request, url_for)
+from flask_login import current_user, login_required, login_user, logout_user
+from graphs import main
 from models import User
 from views import views
 
 admin = Blueprint('admin', __name__)
 
+
+PLOTS = [
+    'line',
+    'bar',
+    'scatter',
+    'pie',
+    'hist',
+    'box',
+    'violin',
+]
+
 @admin.route('/users')
 @login_required
 def users():
     users = User.query.all()
-    return render_template('admin/users.html', users=users)
+    return render_template('admin/users.html', users=users, plot_types=PLOTS)
 
 @admin.route('/user/create', methods=['GET', 'POST'])
 @login_required
@@ -70,3 +80,26 @@ def delete_user(id):
 def panel():
     return render_template('admin/panel.html')
 
+
+@admin.route('admin/generate_plot', methods=['GET', 'POST'])
+@login_required
+def generate_plot():
+    if request.method == 'POST':
+        x = request.form['x_axis']
+        y = request.form['y_axis']
+        type_p = request.form['plot_type']
+        print(x, y, type)
+        if type_p not in PLOTS:
+            flash('Invalid plot type', 'danger')
+            return redirect(url_for('admin.panel'))
+        if not x or not y:
+            flash('Invalid x or y axis', 'danger')
+            return redirect(url_for('admin.panel'))
+        if x == y:
+            flash('x and y axis cannot be the same', 'danger')
+            return redirect(url_for('admin.panel'))
+        html =  main(x=x, y=y, type_p=type_p)
+        return jsonify({
+            'title': f'{type_p.capitalize()} Plot: {x} vs {y}',
+            'html': html
+        })

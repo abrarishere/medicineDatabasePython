@@ -17,13 +17,13 @@
 <nav class="relative">
         <div class="flex items-center justify-between shadow">
             <div>
-                <button class="flex items-center justify-center p-3 uppercase shadow">
-                    <i id="menubtn" class="fas fa-bars"></i>
+              <button class="flex items-center justify-center p-3 uppercase shadow" id='menubtn'>
+                    <i class="fas fa-bars"></i>
                     <span class="ml-3 text-lg">Menu</span>
                 </button>
             </div>
             <div class="absolute top-0 ">
-                <div class="hidden h-screen bg-white shadow-md w-80" id="panelContent">
+                <div class="hidden h-screen z-50 bg-white shadow-md w-80" id="panelContent">
                     <div class="flex items-center justify-between">
                         <div id="close" class="p-4">
                             <span class="text-2xl">X</span>
@@ -31,7 +31,7 @@
 
                     </div>
                     <hr>
-                    <div class="">
+                    <div class="p-4">
                         <ul class="font-bold">
                             <li class="flex items-center px-5 py-4">
                                 <i class="fas fa-home"></i>
@@ -94,5 +94,8 @@
       {% endblock %}
     </div>
 
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}
+    {% endblock %}
 </body>
 </html>
