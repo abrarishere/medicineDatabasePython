@@ -1,11 +1,12 @@
 from flask import (Blueprint, Flask, flash, jsonify, redirect, render_template,
                    request, url_for)
 from flask_login import current_user, login_required, login_user, logout_user
+from werkzeug.security import check_password_hash, generate_password_hash
 
 from db import db
 from models import User
 from user_graphs import main
-from views import views
+from views import views 
 
 admin = Blueprint('admin', __name__)
 
@@ -35,6 +36,7 @@ def create_user():
             flash('Username already exists', 'danger')
             return redirect(url_for('admin.create_user'))
         password = request.form['password']
+        password = generate_password_hash(password)
         is_admin = request.form.get('is_admin', False)
         if is_admin:
             is_admin = True
@@ -53,6 +55,7 @@ def update_user(id):
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        password = generate_password_hash(password)
         is_admin = request.form.get('is_admin', False)
         if is_admin:
             is_admin = True
@@ -76,6 +79,25 @@ def delete_user(id):
     flash('User deleted successfully', 'success')
     return redirect(url_for('admin.users'))
 
+@admin.route('/login_as_user/<int:id>')
+@login_required
+def login_as_user(id):
+    user = User.query.get(id)
+    login_user(user)
+    return redirect(url_for('views.home'))
+
+@admin.route('/change_password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    if request.method == 'POST':
+        password = request.form['password']
+        password = generate_password_hash(password)
+        current_user.password = password
+        db.session.commit()
+        flash('Password changed successfully', 'success')
+        return redirect(url_for('admin.panel'))
+    return render_template('admin/change_password.html', user=current_user)
+
 @admin.route('/panel')
 @login_required
 def panel():
@@ -95,3 +117,4 @@ def generate_plot():
             'title': f'{type_p.capitalize()} Plot: {x} vs {y}',
             'html': html
         })
+

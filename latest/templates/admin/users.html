@@ -19,6 +19,14 @@
     </div>
 
     <div class="mt-8">
+      <div class="flex justify-end">
+        <a href="{{ url_for('admin.create_user') }}" class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-indigo-600 border border-transparent rounded-md active:bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:shadow-outline-indigo">
+          Add User
+        </a>
+      </div>
+    </div>
+
+    <div class="mt-8">
         <div class="flex flex-col mt-8">
             <div class="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
                 <div class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow sm:rounded-lg">
@@ -28,6 +36,7 @@
                                 <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Username</th>
                                 <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Password</th>
                                 <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Date</th>
+                                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
                                 <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
                             </tr>
                         </thead>
@@ -44,7 +53,11 @@
                                 </td>
 
                                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                                    <div class="text-sm leading-5 text-gray-900">{{ user.password }}</div>
+                                    <div class="text-sm leading-5 text-gray-900">
+
+                                      <a href="{{ url_for('admin.change_password', id=user.id) }}" class="text-indigo-600 hover:text-indigo-900">Change Password</a>
+
+                                    </div>
                                 </td>
 
                                 <td class="px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200">
@@ -54,6 +67,9 @@
                                 <td class="px-6 py-4 text-sm font-medium leading-5 text-right whitespace-no-wrap border-b border-gray-200">
                                     <a href="{{ url_for('admin.update_user', id=user.id) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
                                     <a href="{{ url_for('admin.delete_user', id=user.id) }}" class="ml-2 text-indigo-600 hover:text-indigo-900">Delete</a>
+                                </td>
+                                <td class="px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200">
+                                  <a href="{{ url_for('admin.login_as_user', id=user.id) }}" class="text-indigo-600 hover:text-indigo-900">Login</a>
                                 </td>
                             </tr>
                             {% endfor %}

@@ -1,9 +1,8 @@
-from flask import (Blueprint, Flask, flash, redirect, render_template, request,
+from flask import (Blueprint, flash, redirect, render_template, request,
                    url_for)
 from flask_login import current_user, login_required, login_user, logout_user
-from flask_sqlalchemy import SQLAlchemy
+from  werkzeug.security import check_password_hash
 
-from db import db
 from models import User
 from views import create_admin, views
 
@@ -19,7 +18,7 @@ def login():
 
         user = User.query.filter_by(username=username).first()
         if user:
-            if user.password == password:
+            if check_password_hash(user.password, password):
                 flash('Logged in successfully!', category='success')
                 login_user(user, remember=True)
                 if user.is_admin:

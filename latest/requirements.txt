@@ -6,4 +6,10 @@ flask-moment
 flask-openid
 flask-pagedown
 flask-sqlalchemy
+flask-bcrypt
 requests
+plotly
+flask_bootstrap
+flask_wtf
+flask_script
+flask_migrate

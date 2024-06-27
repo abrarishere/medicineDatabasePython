@@ -1,8 +1,8 @@
 from flask import (Blueprint, Flask, flash, redirect, render_template, request,
                    url_for)
 from flask_login import current_user, login_required, login_user, logout_user
-from flask_sqlalchemy import SQLAlchemy
 
+from werkzeug.security import generate_password_hash
 from db import db
 from models import User
 
@@ -28,6 +28,7 @@ def create_admin():
         return
     username='admin'
     password='admin'
+    password = generate_password_hash(password)
     is_admin=True
     user = User(username=username, password=password, is_admin=is_admin)
     db.session.add(user)
