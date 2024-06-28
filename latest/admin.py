@@ -206,3 +206,24 @@ def create_medicine():
         flash('Medicine created successfully', 'success')
         return redirect(url_for('admin.medicines'))
     return render_template('admin/medicines/create_medicine.html')
+
+@admin.route('/medicine/<int:id>/update', methods=['GET', 'POST'])
+@login_required
+def update_medicine(id):
+    medicine = Medicines.query.get(id)
+    if request.method == 'POST':
+        name = request.form['name']
+        medicine.name = name
+        db.session.commit()
+        flash('Medicine updated successfully', 'success')
+        return redirect(url_for('admin.medicines'))
+    return render_template('admin/medicines/update_medicine.html', medicine=medicine)
+
+@admin.route('/medicine/delete/<int:id>')
+@login_required
+def delete_medicine(id):
+    medicine = Medicines.query.get(id)
+    db.session.delete(medicine)
+    db.session.commit()
+    flash('Medicine deleted successfully', 'success')
+    return redirect(url_for('admin.medicines'))
