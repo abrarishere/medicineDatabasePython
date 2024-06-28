@@ -1,12 +1,16 @@
-from flask import (Blueprint, Flask, flash, jsonify, redirect, render_template,
-                   request, url_for)
-from flask_login import current_user, login_required, login_user, logout_user
-from werkzeug.security import check_password_hash, generate_password_hash
+from io import BytesIO
+
+import pandas as pd
+from flask import (Blueprint, Response, flash, jsonify, redirect,
+                   render_template, request, send_file, url_for)
+from flask_login import current_user, login_required, login_user
+from werkzeug.security import generate_password_hash
+
 
 from db import db
 from models import User
 from user_graphs import main
-from views import views 
+from views import views
 
 admin = Blueprint('admin', __name__)
 
@@ -118,3 +122,61 @@ def generate_plot():
             'html': html
         })
 
+@admin.route('/tables')
+@login_required
+def tables():
+    users = User.query.all()
+    return render_template('admin/tables.html', users=users)
+
+
+
+@admin.route('/download_json/<table_name>')
+@login_required
+def download_json(table_name):
+    model = globals().get(table_name)
+    if not model:
+        return redirect(url_for('admin.tables'))
+
+    data = []
+    for item in model.query.all():
+        item_data = {column.name: getattr(item, column.name) for column in item.__table__.columns}
+        data.append(item_data)
+
+    return send_json(data, f'{table_name}.json')
+
+@admin.route('/download_excel/<table_name>')
+@login_required
+def download_excel(table_name):
+    model = globals().get(table_name)
+    if not model:
+        return redirect(url_for('admin.tables'))
+
+    data = []
+    for item in model.query.all():
+        item_data = {column.name: getattr(item, column.name) for column in item.__table__.columns}
+        data.append(item_data)
+
+    return send_excel(data, f'{table_name}.xlsx')
+
+def send_json(data, filename):
+    df = pd.DataFrame(data)
+    json_data = df.to_json(orient='records')
+    return Response(
+        json_data,
+        mimetype='application/json',
+        headers={'Content-Disposition': f'attachment;filename={filename}'}
+    )
+
+def send_excel(data, filename):
+    df = pd.DataFrame(data)
+    output = BytesIO()
+    writer = pd.ExcelWriter(output, engine='xlsxwriter')
+    df.to_excel(writer, index=False, sheet_name='Sheet1')
+    writer.close()
+    output.seek(0)
+    return send_file(
+        output,
+        mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        as_attachment=True,
+        download_name=filename
+    )

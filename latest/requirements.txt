@@ -13,3 +13,10 @@ flask_bootstrap
 flask_wtf
 flask_script
 flask_migrate
+xlsxwriter
+panadas
+matplotlib
+io
+datetime
+time
+os
