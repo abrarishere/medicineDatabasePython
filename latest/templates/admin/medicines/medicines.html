@@ -1,0 +1,10 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+    <h1>Medicines</h1>
+    <ul>
+        {% for medicine in medicines %}
+            <li>{{ medicine.name }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

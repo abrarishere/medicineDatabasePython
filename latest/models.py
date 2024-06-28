@@ -25,15 +25,17 @@ class Patients(db.Model):
     date_created = db.Column(db.DateTime(timezone=True), default=func.now())
     phone = db.Column(db.String(150), nullable=True)
     cnic = db.Column(db.String(150), nullable=True)
-    ward_id = db.Column(db.Integer, ForeignKey('wards.id'), nullable=False) #It is the ward in which the patient is admitted
+    ward_id = db.Column(db.Integer, ForeignKey('wards.id'), nullable=False)
     medicine_list = db.relationship('Medicines', backref='patients', lazy=True)
-    
 
 class Wards(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     ward_name = db.Column(db.String(150), nullable=False)
     patients = db.relationship('Patients', backref='ward', lazy=True)
 
+
 class Medicines(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     medicine_name = db.Column(db.String(150), nullable=False)
+    patient_id = db.Column(db.Integer, ForeignKey('patients.id'), nullable=False)
+

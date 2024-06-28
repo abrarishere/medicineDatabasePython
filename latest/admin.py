@@ -6,7 +6,6 @@ from flask import (Blueprint, Response, flash, jsonify, redirect,
 from flask_login import current_user, login_required, login_user
 from werkzeug.security import generate_password_hash
 
-
 from db import db
 from models import User
 from user_graphs import main
@@ -180,3 +179,8 @@ def send_excel(data, filename):
         as_attachment=True,
         download_name=filename
     )
+
+@admin.route('/medicines', methods=['GET', 'POST'])
+@login_required
+def medicines():
+    return render_template('admin/medicines/medicines.html')
