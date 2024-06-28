@@ -1,0 +1,137 @@
+
+    <div class="mt-8">
+        <h2 class="text-xl font-semibold text-gray-700">Generate Plots</h2>
+        <form id="plotForm">
+            <div class="mb-4">
+                <label class="block text-gray-700">X-Axis:</label>
+                <select name="x_axis" class="block w-full mt-1">
+                  {% for column in columns %}
+                    <option value="{{ column }}">{{ column }}</option>
+                  {% endfor %}
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">Y-Axis:</label>
+                <select name="y_axis" class="block w-full mt-1">
+                {% for column in columns %}
+                    <option value="{{ column }}">{{ column }}</option>
+                {% endfor %}
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">Plot Type:</label>
+                <select name="plot_type" class="block w-full mt-1">
+                    {% for plot_type in plot_types %}
+                    <option value="{{ plot_type }}">{{ plot_type }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="mb-4">
+              <input class='hidden' name='table_name' value='{{ table_name }}'>
+            </div>
+            <div class="flex justify-end">
+                <button type="button" onclick="addPlot()" class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-indigo-600 border border-transparent rounded-md active:bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:shadow-outline-indigo">
+                    Add Plot
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div id="plotsContainer" class="mt-8 space-y-4 border-t border-gray-200">
+        <!-- Plots will be inserted here dynamically -->
+    </div>
+
+<script>
+function addPlot() {
+    const form = document.getElementById('plotForm');
+    const formData = new FormData(form);
+
+
+    fetch('{{url_for("admin.generate_plot")}}', {
+        method: 'POST',
+        body: formData 
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        const plotsContainer = document.getElementById('plotsContainer');
+        const plotDiv = document.createElement('div');
+        plotDiv.className = 'mt-4';
+        plotDiv.innerHTML = `
+            <div class="flex justify-between items-center">
+                <h3 class="text-lg font-semibold text-gray-700">${data.title}</h3>
+                <div>
+                    <i class="fas fa-expand text-green-600 cursor-pointer fullscreen-button mr-2"></i>
+                    <i class="fas fa-trash text-red-600 cursor-pointer delete-button"></i>
+                    <i class="fas fa-arrow-up text-blue-600 cursor-pointer"></i>
+                </div>
+            </div>
+            ${data.html}
+        `;
+        plotsContainer.appendChild(plotDiv);
+
+        const foldButton = plotDiv.querySelector('.fa-arrow-up');
+        let isFolded = false;
+        foldButton.addEventListener('click', () => {
+          if (!isFolded) {
+            plotDiv.querySelector('.plotly').style.display = 'none';
+            foldButton.classList.remove('fa-arrow-up');
+            foldButton.classList.add('fa-arrow-down');
+            isFolded = true;
+          } else {
+            plotDiv.querySelector('.plotly').style.display = 'block';
+            foldButton.classList.remove('fa-arrow-down');
+            foldButton.classList.add('fa-arrow-up');
+            isFolded = false;
+          }
+        });
+
+        // Attach event listener to the delete button
+        const deleteButton = plotDiv.querySelector('.delete-button');
+        deleteButton.addEventListener('click', () => {
+            plotDiv.remove();
+        });
+
+        // Attach event listener to the full screen button
+        const fullscreenButton = plotDiv.querySelector('.fullscreen-button');
+
+        let isFullscreen = false;
+
+        fullscreenButton.addEventListener('click', () => {
+            if (!isFullscreen) {
+                if (plotDiv.requestFullscreen) {
+                    plotDiv.requestFullscreen();
+                } else if (plotDiv.mozRequestFullScreen) { // Firefox
+                    plotDiv.mozRequestFullScreen();
+                } else if (plotDiv.webkitRequestFullscreen) { // Chrome, Safari and Opera
+                    plotDiv.webkitRequestFullscreen();
+                } else if (plotDiv.msRequestFullscreen) { // IE/Edge
+                    plotDiv.msRequestFullscreen();
+                }
+                isFullscreen = true;
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.mozCancelFullScreen) { // Firefox
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) { // Chrome, Safari and Opera
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) { // IE/Edge
+                    document.msExitFullscreen();
+                }
+                isFullscreen = false;
+            }
+        });
+
+        // Execute any scripts within the newly added HTML
+        const scriptTags = plotDiv.getElementsByTagName('script');
+        for (let i = 0; i < scriptTags.length; i++) {
+            eval(scriptTags[i].innerText);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+</script>
+
+

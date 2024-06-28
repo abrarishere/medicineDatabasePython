@@ -3,7 +3,7 @@ import plotly.express as px
 from flask import jsonify, request
 from flask_login import login_required
 
-from models import User
+from models import Medicines, User
 
 
 def all_plots(type, x, y, df):
@@ -54,33 +54,29 @@ def plotly_to_html(fig):
         return ''
     return fig.to_html(full_html=False)
 
-def main(x, y, type_p):
-    data = User.query.all()
-    
-    # Initialize lists to collect user attributes
-    ids, usernames, passwords, is_admins, date_created = [], [], [], [], []
+def main(x, y, type_p, table_name):
+    if table_name == 'User':
+        data = User.query.all()
+        data_dict = {
+            'id': [d.id for d in data],
+            'username': [d.username for d in data],
+            'password': [d.password for d in data],
+            'is_admin': [d.is_admin for d in data],
+            'date_created': [d.date_created for d in data],
+        }
+    elif table_name == 'Medicines':
+        data = Medicines.query.all()
+        data_dict = {
+            'id': [d.id for d in data],
+            'name': [d.name for d in data],
+            'date_created': [d.date_created for d in data],
+        }
+    else:
+        print(f'Error: {table_name} not found')
+        return None
 
-    # Iterate over all users and collect their attributes
-    for user in data:
-        ids.append(user.id)
-        usernames.append(user.username)
-        passwords.append(user.password)
-        is_admins.append(user.is_admin)
-        date_created.append(user.date_created)  # Assuming date_created is a datetime field in User model
-
-    # Create a DataFrame from the collected data
-    data_dict = {
-        'id': ids,
-        'username': usernames,
-        'password': passwords,
-        'is_admin': is_admins,
-        'date_created': date_created
-    }
     df = pd.DataFrame(data_dict)
     
-    print(f'DataFrame columns: {df.columns}')
-    print(f'Form x: {x}, y: {y}, type_p: {type_p}')
-
     if x not in df.columns or y not in df.columns:
         print(f'Error: {x} or {y} not in DataFrame columns')
         return None

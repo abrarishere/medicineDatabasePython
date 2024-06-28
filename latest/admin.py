@@ -7,7 +7,7 @@ from flask_login import current_user, login_required, login_user
 from werkzeug.security import generate_password_hash
 
 from db import db
-from models import User
+from models import Medicines, Patients, User, Wards
 from user_graphs import main
 from views import views
 
@@ -28,7 +28,9 @@ PLOTS = [
 @login_required
 def users():
     users = User.query.all()
-    return render_template('admin/users.html', users=users, plot_types=PLOTS)
+    columns = User.__table__.columns
+    columns = [column.name for column in columns]
+    return render_template('admin/users.html', users=users, plot_types=PLOTS, columns=columns, table_name='User')
 
 @admin.route('/user/create', methods=['GET', 'POST'])
 @login_required
@@ -114,8 +116,13 @@ def generate_plot():
         x = request.form['x_axis']
         y = request.form['y_axis']
         type_p = request.form['plot_type']
-        print(f'Received form data - x: {x}, y: {y}, type: {type_p}')
-        html = main(x=x, y=y, type_p=type_p)
+        table_name = request.form['table_name']
+
+        if x==y:
+            flash('X and Y axis must be different', 'error')
+            return redirect(url_for('admin.generate_plot'))
+
+        html = main(x=x, y=y, type_p=type_p, table_name=table_name)
         return jsonify({
             'title': f'{type_p.capitalize()} Plot: {x} vs {y}',
             'html': html
@@ -183,4 +190,19 @@ def send_excel(data, filename):
 @admin.route('/medicines', methods=['GET', 'POST'])
 @login_required
 def medicines():
-    return render_template('admin/medicines/medicines.html')
+    medicines = Medicines.query.all()
+    columns = Medicines.__table__.columns
+    columns = [column.name for column in columns]
+    return render_template('admin/medicines/medicines.html', medicines=medicines,  plot_types=PLOTS, columns=columns, table_name='Medicines')
+
+@admin.route('/medicine/create', methods=['GET', 'POST'])
+@login_required
+def create_medicine():
+    if request.method == 'POST':
+        name = request.form['name']
+        medicine = Medicines(name=name)
+        db.session.add(medicine)
+        db.session.commit()
+        flash('Medicine created successfully', 'success')
+        return redirect(url_for('admin.medicines'))
+    return render_template('admin/medicines/create_medicine.html')
