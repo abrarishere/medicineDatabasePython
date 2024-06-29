@@ -10,68 +10,66 @@
           <i class="fas fa-table mr-2"></i>
           Table List
         </button>
-        <ul id="tableList" class="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg hidden z-10">
+        <ul id="tableList" class="absolute right-0 mt-2 bg-white border rounded-lg shadow-lg hidden z-10 sm:w-56 lg:w-64">
+          {% for table_name in tables %}
           <li>
-            <a href="#userSection" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none">
-              <i class="fas fa-user mr-2"></i> Users
+            <a href="#{{ table_name|lower }}Section" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none">
+              <i class="fas fa-table mr-2"></i> {{ table_name }}
             </a>
           </li>
-          <!-- Add more table entries for other sections as needed -->
+          {% endfor %}
         </ul>
       </div>
     </div>
   </div>
 
-  <!-- Users Section -->
-  <div id="userSection" class="mt-4">
+  {% for table_name, data in table_data.items() %}
+  <!-- Section for {{ table_name }} -->
+  <div id="{{ table_name|lower }}Section" class="mt-4">
     <div class="flex justify-between items-center">
-      <h2 class="text-2xl font-semibold text-gray-700">Users</h2>
-      <div class="flex items-center">
-        <a href="{{ url_for('admin.users', table_name='User') }}" class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-600 border border-transparent rounded-md active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-green mr-2">
+      <h2 class="text-2xl font-semibold text-gray-700">{{ table_name }}</h2>
+      <div class="flex items-center space-x-2">
+        {% if table_name == 'User' %}
+        <a href="{{ url_for('admin.users') }}" class="px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-600 border border-transparent rounded-md active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-green">
           Edit it
         </a>
-        <a href="{{ url_for('admin.download_excel', table_name='User') }}" class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-600 border border-transparent rounded-md active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-green">
+        {% elif table_name == 'Medicines' %}
+        <a href="{{ url_for('admin.medicines') }}" class="px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-600 border border-transparent rounded-md active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-green">
+          Edit it
+        </a>
+        {% endif %}
+        <a href="{{ url_for('admin.download_excel', table_name=table_name) }}" class="px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-600 border border-transparent rounded-md active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-green">
           Download Excel
         </a>
-        <a href="{{ url_for('admin.download_json', table_name='User') }}" class="px-4 py-2 ml-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-md active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
+        <a href="{{ url_for('admin.download_json', table_name=table_name) }}" class="px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-md active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
           Download JSON
         </a>
       </div>
     </div>
 
-    <!-- User Table -->
+    <!-- Table for {{ table_name }} -->
     <div class="mt-8">
       <div class="flex flex-wrap -mx-6">
-        <div class="w-full bg-white shadow-md rounded my-6">
+        <div class="w-full bg-white shadow-md rounded my-6 px-4 sm:px-6 lg:px-8">
           <div class="overflow-x-auto">
             <table class="min-w-full bg-white">
               <thead>
                 <tr>
-                  <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">ID</th>
-                  <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Username</th>
-                  <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Password</th>
-                  <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date Created</th>
-                  <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Is Admin</th>
+                  {% for column in data.columns %}
+                  <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">{{ column }}</th>
+                  {% endfor %}
                 </tr>
               </thead>
               <tbody>
-                {% for user in users %}
+                {% for entry in data.entries %}
                 <tr>
+                  {% for column_name in data.details %}
                   <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                    <div class="text-sm leading-5 text-gray-800">{{ user.id }}</div>
+                    <div class="text-sm leading-5 text-gray-800">
+                      {{ entry[column_name] }}
+                    </div>
                   </td>
-                  <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                    <div class="text-sm leading-5 text-gray-800">{{ user.username }}</div>
-                  </td>
-                  <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                    <div class="text-sm leading-5 text-gray-800">{{ user.password }}</div>
-                  </td>
-                  <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                    <div class="text-sm leading-5 text-gray-800">{{ user.date_created }}</div>
-                  </td>
-                  <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                    <div class="text-sm leading-5 text-gray-800">{{ user.is_admin }}</div>
-                  </td>
+                  {% endfor %}
                 </tr>
                 {% endfor %}
               </tbody>
@@ -81,9 +79,7 @@
       </div>
     </div>
   </div>
-
-  <!-- Add more sections for other entities as needed -->
-
+  {% endfor %}
 </div>
 
 <script>
@@ -97,5 +93,4 @@
     });
   });
 </script>
-
 {% endblock %}

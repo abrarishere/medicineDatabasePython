@@ -1,4 +1,5 @@
 from flask import Flask
+import os
 from flask_login import LoginManager
 
 from admin import admin
@@ -35,4 +36,6 @@ def create_app():
 app = create_app()
 
 if __name__ == '__main__':
+    #Clear Console
+    os.system('cls' if os.name == 'nt' else 'clear')
     app.run(debug=True)

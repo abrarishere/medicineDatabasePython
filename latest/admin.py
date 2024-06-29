@@ -100,7 +100,7 @@ def change_password():
         current_user.password = password
         db.session.commit()
         flash('Password changed successfully', 'success')
-        return redirect(url_for('admin.panel'))
+        return redirect(url_for('admin.users'))
     return render_template('admin/change_password.html', user=current_user)
 
 @admin.route('/panel')
@@ -131,8 +131,23 @@ def generate_plot():
 @admin.route('/tables')
 @login_required
 def tables():
-    users = User.query.all()
-    return render_template('admin/tables.html', users=users)
+    tables = ['User', 'Patients', 'Wards', 'Medicines']
+    
+    table_data = {}
+    for table_name in tables:
+        model_class = globals()[table_name]
+        table_entries = model_class.query.all()
+        table_columns = model_class.__table__.columns
+        column_names = [column.name.replace('_', ' ').capitalize() for column in table_columns]
+        column_details = model_class.__table__.columns.keys()
+        
+        table_data[table_name] = {
+            'entries': table_entries,
+            'columns': column_names,
+            'details': column_details
+        }
+
+    return render_template('admin/tables.html', table_data=table_data, tables=tables)
 
 
 
