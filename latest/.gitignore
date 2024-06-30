@@ -1,0 +1,6 @@
+# Gitignore for python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pyw
