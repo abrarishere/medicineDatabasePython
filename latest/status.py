@@ -1,7 +1,5 @@
 import time
 from datetime import datetime, timedelta
-
-from sqlalchemy import update
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 from db import db
