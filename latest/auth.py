@@ -1,8 +1,8 @@
-from flask import (Blueprint, flash, redirect, render_template, request,
-                   url_for)
+from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
-from  werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 
+from admin import admin
 from models import User
 from views import create_admin, views
 
@@ -23,11 +23,8 @@ def login():
                 login_user(user, remember=True)
                 if user.is_admin:
                     return redirect(url_for('views.admin'))
-                else:
-                    return redirect(url_for('views.home'))
-                    
-            else:
-                flash('Incorrect password, try again.', category='error')
+                return redirect(url_for('views.home'))
+            flash('Incorrect password, try again.', category='error')
         else:
             flash('Username does not exist.', category='error')
 

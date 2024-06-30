@@ -25,8 +25,7 @@ def login():
                 user.is_admin = True
                 return redirect(url_for('main.admin'))
             return redirect(url_for('main.index'))
-        else:
-            flash('Login failed', 'danger')
+        flash('Login failed', 'danger')
     return render_template('login.html')
 
 @main_blueprint.route('/logout')
@@ -185,9 +184,8 @@ def get_patient():
     patient = AddPatient.query.filter_by(mrn_number=mrn_number).first()
     if patient:
         return render_template('patient_medicine.html', patient=patient, medicines=MedicineList.query.all(), ward=Wards.query.get(patient.ward_id))
-    else:
-        flash('Patient not found', 'danger')
-        return redirect(url_for('main.index'))
+    flash('Patient not found', 'danger')
+    return redirect(url_for('main.index'))
 
 
 @main_blueprint.route('/add_medicine_to_patient', methods=['POST'])
