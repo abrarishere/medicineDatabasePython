@@ -1,10 +1,10 @@
 from flask import (Blueprint, flash, redirect, render_template, request,
                    url_for)
-from flask_login import current_user, login_required, login_user, logout_user
-from  werkzeug.security import check_password_hash, generate_password_hash
+from flask_login import login_required, login_user, logout_user
+from  werkzeug.security import check_password_hash
 
 from models import User
-from views import create_admin, views
+from views import create_admin
 
 auth = Blueprint('auth', __name__)
 
