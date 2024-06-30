@@ -1,4 +1,3 @@
-
 {% extends 'admin/base.html' %}
 
 {% block content %}
@@ -7,14 +6,14 @@
     <div class="mt-8">
         <div class="max-w-4xl mx-auto">
             <div class="bg-white p-6 rounded-lg shadow-md">
-                <h2 class="text-2xl font-semibold text-gray-700">Update Medicine</h2>
-                <form action="{{ url_for('admin.update_medicine', id=medicine.id) }}" method="POST">
+                <h2 class="text-2xl font-semibold text-gray-700">Update Ward</h2>
+                <form action="{{ url_for('admin.update_ward', id=ward.id) }}" method="POST">
                     <div class="mt-4">
                         <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-                        <input type="text" name="name" id="name" class="form-input mt-1 block w-full rounded-md border-gray-300 placeholder-gray-300 p-2" placeholder="Name" value="{{ medicine.name }}">
+                        <input type="text" name="name" id="name" class="form-input mt-1 block w-full rounded-md border-gray-300 placeholder-gray-300 p-2" placeholder="Name" value="{{ ward.name }}">
                     </div>
                     <div class="mt-6">
-                        <button type="submit" class="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-md">Update Medicine</button>
+                      <button type="submit" class="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-md">Update Ward</button> 
                     </div>
                 </form>
             </div>

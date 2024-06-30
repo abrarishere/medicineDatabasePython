@@ -3,7 +3,7 @@ import plotly.express as px
 from flask import jsonify, request
 from flask_login import login_required
 
-from models import Medicines, User
+from models import Medicines, User, Wards
 
 
 def all_plots(type, x, y, df):
@@ -70,6 +70,12 @@ def main(x, y, type_p, table_name):
             'id': [d.id for d in data],
             'name': [d.name for d in data],
             'date_created': [d.date_created for d in data],
+        }
+    elif table_name == 'Wards':
+        data = Wards.query.all()
+        data_dict = {
+            'id': [d.id for d in data],
+            'name': [d.name for d in data],
         }
     else:
         print(f'Error: {table_name} not found')

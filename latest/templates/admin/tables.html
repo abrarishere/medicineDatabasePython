@@ -37,6 +37,10 @@
         <a href="{{ url_for('admin.medicines') }}" class="px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-600 border border-transparent rounded-md active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-green">
           Edit it
         </a>
+        {% elif table_name == 'Wards' %}
+        <a href="{{ url_for('admin.wards') }}" class="px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-600 border border-transparent rounded-md active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-green">
+          Edit it
+        </a>
         {% endif %}
         <a href="{{ url_for('admin.download_excel', table_name=table_name) }}" class="px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-600 border border-transparent rounded-md active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-green">
           Download Excel

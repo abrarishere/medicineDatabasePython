@@ -242,3 +242,45 @@ def delete_medicine(id):
     db.session.commit()
     flash('Medicine deleted successfully', 'success')
     return redirect(url_for('admin.medicines'))
+
+
+@admin.route('/wards', methods=['GET', 'POST'])
+@login_required
+def wards():
+    wards = Wards.query.all()
+    columns = Wards.__table__.columns
+    columns = [column.name for column in columns]
+    return render_template('admin/wards/wards.html', wards=wards,  plot_types=PLOTS, columns=columns, table_name='Wards')
+
+@admin.route('/ward/create', methods=['GET', 'POST'])
+@login_required
+def create_ward():
+    if request.method == 'POST':
+        name = request.form['name']
+        ward = Wards(name=name)
+        db.session.add(ward)
+        db.session.commit()
+        flash('Ward created successfully', 'success')
+        return redirect(url_for('admin.wards'))
+    return render_template('admin/wards/create_ward.html')
+
+@admin.route('/ward/<int:id>/update', methods=['GET', 'POST'])
+@login_required
+def update_ward(id):
+    ward = Wards.query.get(id)
+    if request.method == 'POST':
+        name = request.form['name']
+        ward.name = name
+        db.session.commit()
+        flash('Ward updated successfully', 'success')
+        return redirect(url_for('admin.wards'))
+    return render_template('admin/wards/update_ward.html', ward=ward)
+
+@admin.route('/ward/delete/<int:id>')
+@login_required
+def delete_ward(id):
+    ward = Wards.query.get(id)
+    db.session.delete(ward)
+    db.session.commit()
+    flash('Ward deleted successfully', 'success')
+    return redirect(url_for('admin.wards'))
