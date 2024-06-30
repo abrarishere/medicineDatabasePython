@@ -24,8 +24,7 @@ def login():
                 if user.is_admin:
                     return redirect(url_for('views.admin'))
                 return redirect(url_for('views.home'))
-            else:
-                flash('Incorrect password, try again.', category='error')
+            flash('Incorrect password, try again.', category='error')
         else:
             flash('Username does not exist.', category='error')
 
