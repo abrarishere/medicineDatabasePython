@@ -7,7 +7,7 @@ from flask_login import current_user, login_required, login_user
 from werkzeug.security import generate_password_hash
 
 from db import db
-from models import Medicines, User, Wards
+from models import Medicines, Patients, User, Wards
 from user_graphs import main
 
 admin = Blueprint('admin', __name__)

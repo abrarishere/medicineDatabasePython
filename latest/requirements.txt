@@ -6,17 +6,17 @@ flask-moment
 flask-openid
 flask-pagedown
 flask-sqlalchemy
-flask-bcrypt
+# flask-bcrypt
 requests
 plotly
 flask_bootstrap
 flask_wtf
 flask_script
 flask_migrate
-xlsxwriter
-panadas
-matplotlib
-io
-datetime
-time
-os
+# xlsxwriter
+# panadas
+# matplotlib
+# io
+# datetime
+# time
+# os

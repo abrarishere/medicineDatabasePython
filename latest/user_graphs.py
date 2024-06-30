@@ -1,5 +1,6 @@
 import pandas as pd
 import plotly.express as px
+from flask_login import login_required
 
 from models import Medicines, User, Wards
 
