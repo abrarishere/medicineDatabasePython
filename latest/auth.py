@@ -23,9 +23,7 @@ def login():
                 login_user(user, remember=True)
                 if user.is_admin:
                     return redirect(url_for('views.admin'))
-                else:
-                    return redirect(url_for('views.home'))
-                    
+                return redirect(url_for('views.home'))
             else:
                 flash('Incorrect password, try again.', category='error')
         else:

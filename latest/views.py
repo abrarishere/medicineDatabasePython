@@ -20,8 +20,7 @@ def home():
 def admin():
     if current_user.is_admin:
         return render_template('admin/panel.html')
-    else:
-        return redirect(url_for('views.home'))
+    return redirect(url_for('views.home'))
 
 def create_admin():
     if User.query.filter_by(username='admin').first():
