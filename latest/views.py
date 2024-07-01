@@ -23,6 +23,7 @@ def admin():
 
 def create_admin():
     if User.query.filter_by(username='admin').first():
+        print('admin is ')
         return
     username='admin'
     password='admin'
@@ -31,5 +32,6 @@ def create_admin():
     user = User(username=username, password=password, is_admin=is_admin)
     db.session.add(user)
     db.session.commit()
+    print('admin done')
 
 
