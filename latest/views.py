@@ -41,8 +41,9 @@ def create_admin():
 def search_patient():
     medicines = Medicines.query.all()
     if request.method == 'POST':
-        mrn = request.form.get('search')
+        mrn = request.form.get('mrn')
         patient = Patients.query.filter_by(mrn=mrn).first()
+        print(patient, mrn)
         return render_template('add_medicine.html', patient=patient, medicines=medicines)
 
 @views.route('/add_medicine', methods=['GET', 'POST'])
@@ -51,7 +52,24 @@ def add_medicine():
     if request.method == 'POST':
         medicine_name = request.form.get('name')
         patient_id = request.form.get('patient_id')
-        patient_medicine = PatientMedicines(patient_id=patient_id, medicine_id=medicine_name)
+        quantity = request.form.get('quantity')
+        increase = request.form.get('increase')
+
+        if increase:
+            patient_medicine = PatientMedicines.query.filter_by(patient_id=patient_id, medicine_id=medicine_name).first()
+            patient_medicine.quantity += 1
+            db.session.commit()
+            flash('Medicine added successfully', category='success')
+            return redirect(url_for('views.home'))
+
+        # if PatientMedicines.query.filter_by(patient_id=patient_id, medicine_id=medicine_name).first():
+        #     patient_medicine = PatientMedicines.query.filter_by(patient_id=patient_id, medicine_id=medicine_name).first()
+        #     patient_medicine.quantity += 1
+        #     db.session.commit()
+        #     flash('Medicine added successfully', category='success')
+        #     return redirect(url_for('views.home'))
+
+        patient_medicine = PatientMedicines(patient_id=patient_id, medicine_id=medicine_name, quantity=quantity)
         db.session.add(patient_medicine)
         db.session.commit()
         flash('Medicine added successfully', category='success')

@@ -45,3 +45,4 @@ class PatientMedicines(db.Model):
     patient_id = db.Column(db.Integer, ForeignKey('patients.id'), nullable=False)
     medicine_id = db.Column(db.Integer, ForeignKey('medicines.id'), nullable=False)
     date_created = db.Column(db.DateTime(timezone=True), default=func.now())
+    quantity = db.Column(db.Integer, default=1)
