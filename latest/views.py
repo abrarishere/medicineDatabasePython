@@ -3,7 +3,7 @@ from flask_login import current_user, login_required
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from db import db
-from models import User
+from models import Users
 
 views = Blueprint('views', __name__)
 
@@ -22,14 +22,14 @@ def admin():
     return redirect(url_for('views.home'))
 
 def create_admin():
-    if User.query.filter_by(username='admin').first():
+    if Users.query.filter_by(username='admin').first():
         print('admin is ')
         return
     username='admin'
     password='admin'
     password = generate_password_hash(password)
     is_admin=True
-    user = User(username=username, password=password, is_admin=is_admin)
+    user = Users(username=username, password=password, is_admin=is_admin)
     db.session.add(user)
     db.session.commit()
     print('admin done')

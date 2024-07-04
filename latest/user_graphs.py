@@ -2,7 +2,7 @@ import pandas as pd
 import plotly.express as px
 from flask_login import login_required
 
-from models import Medicines, User, Wards
+from models import Medicines, Patients, Users, Wards
 
 
 def all_plots(type, x, y, df):
@@ -54,8 +54,8 @@ def plotly_to_html(fig):
     return fig.to_html(full_html=False)
 
 def main(x, y, type_p, table_name):
-    if table_name == 'User':
-        data = User.query.all()
+    if table_name == 'Users':
+        data = Users.query.all()
         data_dict = {
             'id': [d.id for d in data],
             'username': [d.username for d in data],
@@ -75,6 +75,21 @@ def main(x, y, type_p, table_name):
         data_dict = {
             'id': [d.id for d in data],
             'name': [d.name for d in data],
+        }
+    elif table_name == 'Patients':
+        data = Patients.query.all()
+        data_dict = {
+            'id': [d.id for d in data],
+            'first_name': [d.first_name for d in data],
+            'last_name': [d.last_name for d in data],
+            'father_name': [d.father_name for d in data],
+            'age': [d.age for d in data],
+            'cnic': [d.cnic for d in data],
+            'ward_id': [d.ward_id for d in data],
+            'date_created': [d.date_created for d in data],
+            'phone': [d.phone for d in data],
+            'mrn': [d.mrn for d in data],
+            'gender': [d.gender for d in data],
         }
     else:
         print(f'Error: {table_name} not found')

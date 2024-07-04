@@ -6,7 +6,7 @@ from flask_login import LoginManager
 from admin import admin
 from auth import auth
 from db import db
-from models import User
+from models import Users
 from views import views
 
 
@@ -26,7 +26,7 @@ def create_app():
 
     @login_manager.user_loader
     def load_user(id):
-        return User.query.get(int(id))
+        return Users.query.get(int(id))
 
     with app.app_context():
         db.init_app(app)

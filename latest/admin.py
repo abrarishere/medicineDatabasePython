@@ -7,7 +7,7 @@ from flask_login import current_user, login_required, login_user
 from werkzeug.security import generate_password_hash
 
 from db import db
-from models import Medicines, Patients, User, Wards
+from models import Medicines, Patients, Users, Wards
 from user_graphs import main
 
 admin = Blueprint('admin', __name__)
@@ -26,17 +26,17 @@ PLOTS = [
 @admin.route('/users')
 @login_required
 def users():
-    users = User.query.all()
-    columns = User.__table__.columns
+    users = Users.query.all()
+    columns = Users.__table__.columns
     columns = [column.name for column in columns]
-    return render_template('admin/users.html', users=users, plot_types=PLOTS, columns=columns, table_name='User')
+    return render_template('admin/users.html', users=users, plot_types=PLOTS, columns=columns, table_name='Users')
 
 @admin.route('/user/create', methods=['GET', 'POST'])
 @login_required
 def create_user():
     if request.method == 'POST':
         username = request.form['username']
-        if User.query.filter_by(username=username).first():
+        if Users.query.filter_by(username=username).first():
             flash('Username already exists', 'danger')
             return redirect(url_for('admin.create_user'))
         password = request.form['password']
@@ -44,7 +44,7 @@ def create_user():
         is_admin = request.form.get('is_admin', False)
         if is_admin:
             is_admin = True
-        user = User(username=username, password=password, is_admin=is_admin)
+        user = Users(username=username, password=password, is_admin=is_admin)
         db.session.add(user)
         db.session.commit()
         flash('User created successfully', 'success')
@@ -55,7 +55,7 @@ def create_user():
 @admin.route('/user/<int:id>/update', methods=['GET', 'POST'])
 @login_required
 def update_user(id):
-    user = User.query.get(id)
+    user = Users.query.get(id)
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -63,7 +63,7 @@ def update_user(id):
         is_admin = request.form.get('is_admin', False)
         if is_admin:
             is_admin = True
-        if user.username != username and User.query.filter_by(username=username).first():
+        if user.username != username and Users.query.filter_by(username=username).first():
             flash('Username already exists', 'danger')
             return redirect(url_for('admin.update_user', id=id))
         user.username = username
@@ -77,7 +77,7 @@ def update_user(id):
 @admin.route('/user/delete/<int:id>')
 @login_required
 def delete_user(id):
-    user = User.query.get(id)
+    user = Users.query.get(id)
     db.session.delete(user)
     db.session.commit()
     flash('User deleted successfully', 'success')
@@ -86,7 +86,7 @@ def delete_user(id):
 @admin.route('/login_as_user/<int:id>')
 @login_required
 def login_as_user(id):
-    user = User.query.get(id)
+    user = Users.query.get(id)
     login_user(user)
     return redirect(url_for('views.home'))
 
@@ -130,7 +130,7 @@ def generate_plot():
 @admin.route('/tables')
 @login_required
 def tables():
-    tables = ['User', 'Patients', 'Wards', 'Medicines']
+    tables = ['Users', 'Patients', 'Wards', 'Medicines']
     
     table_data = {}
     for table_name in tables:
@@ -283,3 +283,105 @@ def delete_ward(id):
     db.session.commit()
     flash('Ward deleted successfully', 'success')
     return redirect(url_for('admin.wards'))
+
+@admin.route('/ward_patients/<int:id>')
+@login_required
+def ward_patients(id):
+    ward = Wards.query.get(id)
+    patients = ward.patients
+    columns = Patients.__table__.columns
+    values = []
+    for patient in patients:
+        values.append([getattr(patient, column.name) for column in columns])
+    print(values)
+    return render_template('admin/wards/ward_patients.html', patients=patients, ward=ward, columns=columns, values=values)
+
+@admin.route('/patients', methods=['GET', 'POST'])
+@login_required
+def patients():
+    patients = Patients.query.all()
+    columns = Patients.__table__.columns
+    columns = [column.name for column in columns]
+    return render_template('admin/patients/patients.html', patients=patients,  plot_types=PLOTS, columns=columns, table_name='Patients')
+
+@admin.route('/patient/create_patient', methods=['GET', 'POST'])
+@login_required
+def create_patient():
+    wards = Wards.query.all()
+    if request.method == 'POST':
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        father_name = request.form['father_name']
+        age = request.form['age']
+        date_created = request.form['date_created']
+        phone = request.form['phone']
+        cnic = request.form['cnic']
+        ward_id = request.form['ward']
+        mrn = request.form['mrn']
+        gender = request.form['gender']
+
+
+        if Patients.query.filter_by(mrn=mrn).first():
+            flash('Patient with same MRN already exists', 'danger')
+            return redirect(url_for('admin.create_patient'))
+        date_created = pd.to_datetime(date_created).date()
+
+        patient = Patients(
+            first_name=first_name,
+            last_name=last_name,
+            father_name=father_name,
+            age=age,
+            date_created=date_created,
+            phone=phone,
+            cnic=cnic,
+            ward_id=ward_id,
+            mrn=mrn,
+            gender=gender)
+        db.session.add(patient)
+        db.session.commit()
+        flash('Patient created successfully', 'success')
+    return render_template('admin/patients/create_patient.html', wards=wards)
+
+@admin.route('/patient/<int:id>/update', methods=['GET', 'POST'])
+@login_required
+def update_patient(id):
+    patient = Patients.query.get(id)
+    wards = Wards.query.all()
+    if request.method == 'POST':
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        father_name = request.form['father_name']
+        age = request.form['age']
+        date_created = request.form['date_created']
+        phone = request.form['phone']
+        cnic = request.form['cnic']
+        ward_id = request.form['ward']
+        mrn = request.form['mrn']
+
+        if Patients.query.filter_by(mrn=mrn).first() and Patients.query.filter_by(mrn=mrn).first().id != id:
+            flash('Patient with same MRN already exists', 'danger')
+            return redirect(url_for('admin.update_patient', id=id))
+        date_created = pd.to_datetime(date_created).date()
+
+        patient.first_name = first_name
+        patient.last_name = last_name
+        patient.father_name = father_name
+        patient.age = age
+        patient.date_created = date_created
+        patient.phone = phone
+        patient.cnic = cnic
+        patient.ward_id = ward_id
+        patient.mrn = mrn
+        db.session.commit()
+        flash('Patient updated successfully', 'success')
+        return redirect(url_for('admin.patients'))
+    return render_template('admin/patients/update_patient.html', patient=patient, wards=wards)
+        
+@admin.route('/patient/delete/<int:id>')
+@login_required
+def delete_patient(id):
+    patient = Patients.query.get(id)
+    db.session.delete(patient)
+    db.session.commit()
+    flash('Patient deleted successfully', 'success')
+    return redirect(url_for('admin.patients'))

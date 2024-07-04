@@ -8,7 +8,7 @@ from sqlalchemy.sql.schema import ForeignKey
 from db import db
 
 
-class User(db.Model, UserMixin):
+class Users(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
@@ -32,7 +32,6 @@ class Wards(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150), nullable=False)
     patients = db.relationship('Patients', backref='ward', lazy=True)
-    patients_length = db.Column(db.Integer, default=0)
 
 
 class Medicines(db.Model):

@@ -3,7 +3,7 @@ from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from admin import admin
-from models import User
+from models import Users
 from views import create_admin, views
 
 auth = Blueprint('auth', __name__)
@@ -18,7 +18,7 @@ def login():
         password = request.form.get('password')
         print(username, password)
 
-        user = User.query.filter_by(username=username).first()
+        user = Users.query.filter_by(username=username).first()
         if user:
             if check_password_hash(user.password, password):
                 flash('Logged in successfully!', category='success')
