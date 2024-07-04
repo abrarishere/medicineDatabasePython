@@ -1,5 +1,21 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Home</h1>
+<div class="container mx-auto mt-10">
+  <div class='mt-4'>
+    <div class='bg-gray-100 p-4 rounded-lg'>
+      <div class='mb-4'>
+        <h1 class='text-2xl font-semibold'>Search for a Patient</h1>
+      </div>
+      <div class="flex items-center justify-center">
+        <form action="{{ url_for('views.search_patient') }}" method="POST">
+          <div class="flex items-center">
+            <input type="text" name="mrn" class="p-2 px-4 mr-2 border border-gray-300 rounded-lg" placeholder="Search by MRN.." required>
+            <button class="p-2 px-4 bg-blue-500 text-white rounded-lg">Search</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

@@ -1,9 +1,9 @@
-from flask import Blueprint, redirect, render_template, url_for
+from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from db import db
-from models import Users
+from models import Medicines, PatientMedicines, Patients, Users
 
 views = Blueprint('views', __name__)
 
@@ -19,7 +19,9 @@ def home():
 def admin():
     if current_user.is_admin:
         return render_template('admin/panel.html')
-    return redirect(url_for('views.home'))
+    medicines = Medicines.query.all()
+    return redirect(url_for('views.home'), medicines=medicines)
+
 
 def create_admin():
     if Users.query.filter_by(username='admin').first():
@@ -34,4 +36,23 @@ def create_admin():
     db.session.commit()
     print('admin done')
 
+@views.route('/search_patient', methods=['GET', 'POST'])
+@login_required
+def search_patient():
+    medicines = Medicines.query.all()
+    if request.method == 'POST':
+        mrn = request.form.get('search')
+        patient = Patients.query.filter_by(mrn=mrn).first()
+        return render_template('add_medicine.html', patient=patient, medicines=medicines)
 
+@views.route('/add_medicine', methods=['GET', 'POST'])
+@login_required
+def add_medicine():
+    if request.method == 'POST':
+        medicine_name = request.form.get('name')
+        patient_id = request.form.get('patient_id')
+        patient_medicine = PatientMedicines(patient_id=patient_id, medicine_id=medicine_name)
+        db.session.add(patient_medicine)
+        db.session.commit()
+        flash('Medicine added successfully', category='success')
+        return redirect(url_for('views.home'))

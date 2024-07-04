@@ -69,6 +69,7 @@ def main(x, y, type_p, table_name):
             'id': [d.id for d in data],
             'name': [d.name for d in data],
             'date_created': [d.date_created for d in data],
+            'patient_id': [d.patient_id for d in data],
         }
     elif table_name == 'Wards':
         data = Wards.query.all()
@@ -90,6 +91,7 @@ def main(x, y, type_p, table_name):
             'phone': [d.phone for d in data],
             'mrn': [d.mrn for d in data],
             'gender': [d.gender for d in data],
+            'medicine_id': [d.medicine_id for d in data],
         }
     else:
         print(f'Error: {table_name} not found')

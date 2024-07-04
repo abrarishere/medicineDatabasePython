@@ -15,34 +15,7 @@
 <body>
   <!-- Navbar -->
 <nav class="relative">
-        <div class="flex items-center justify-between shadow">
-            <div>
-              <button class="flex items-center justify-center p-3 uppercase shadow" id='menubtn'>
-                    <i class="fas fa-bars"></i>
-                    <span class="ml-3 text-lg">Menu</span>
-                </button>
-            </div>
-            <div class="absolute top-0 ">
-                <div class="hidden h-screen z-50 bg-white shadow-md w-80" id="panelContent">
-                    <div class="flex items-center justify-between">
-                        <div id="close" class="p-4">
-                            <span class="text-2xl">X</span>
-                        </div>
-
-                    </div>
-                    <hr>
-                    <div class="p-4">
-                        <ul class="font-bold">
-                            <li class="flex items-center px-5 py-4">
-                                <i class="fas fa-home"></i>
-                                <a href="{{ url_for('views.home') }}" class="ml-3">Home</a>
-                            </li>
-                            <hr>
-                        </ul>
-                    </div>
-                    </hr>
-                </div>
-            </div>
+        <div class="flex items-center justify-end shadow">
 
             {% if current_user.is_authenticated %}
             <div class="hidden sm:block">

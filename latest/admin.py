@@ -7,11 +7,59 @@ from flask_login import current_user, login_required, login_user
 from werkzeug.security import generate_password_hash
 
 from db import db
-from models import Medicines, Patients, Users, Wards
+from models import Medicines, PatientMedicines, Patients, Users, Wards
 from user_graphs import main
 
 admin = Blueprint('admin', __name__)
 
+
+#
+# import datetime
+#
+# from flask_login import UserMixin
+# from sqlalchemy.sql import func
+# from sqlalchemy.sql.schema import ForeignKey
+#
+# from db import db
+#
+#
+# class Users(db.Model, UserMixin):
+#     id = db.Column(db.Integer, primary_key=True)
+#     username = db.Column(db.String(150), unique=True)
+#     password = db.Column(db.String(150))
+#     is_admin = db.Column(db.Boolean, default=False)
+#     date_created = db.Column(db.DateTime(timezone=True), default=func.now())
+#
+# class Patients(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     first_name = db.Column(db.String(150), nullable=False)
+#     last_name = db.Column(db.String(150), nullable=False)
+#     father_name = db.Column(db.String(150), nullable=True)
+#     age = db.Column(db.Integer, nullable=False)
+#     gender = db.Column(db.String(150), nullable=True)
+#     mrn = db.Column(db.String(150), nullable=False)
+#     date_created = db.Column(db.DateTime(timezone=True), default=func.now())
+#     phone = db.Column(db.String(150), nullable=True)
+#     cnic = db.Column(db.String(150), nullable=True)
+#     ward_id = db.Column(db.Integer, ForeignKey('wards.id'), nullable=False)
+#     patient_medicines = db.relationship('PatientMedicines', backref='patient', lazy=True)
+#
+# class Wards(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(150), nullable=False)
+#     patients = db.relationship('Patients', backref='ward', lazy=True)
+#
+#
+# class Medicines(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(150), nullable=False, unique=True)
+#     date_created = db.Column(db.DateTime(timezone=True), default=func.now())
+#
+# class PatientMedicines(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     patient_id = db.Column(db.Integer, ForeignKey('patients.id'), nullable=False)
+#     medicine_id = db.Column(db.Integer, ForeignKey('medicines.id'), nullable=False)
+#     date_created = db.Column(db.DateTime(timezone=True), default=func.now())
 
 PLOTS = [
     'line',
@@ -242,6 +290,22 @@ def delete_medicine(id):
     flash('Medicine deleted successfully', 'success')
     return redirect(url_for('admin.medicines'))
 
+@admin.route('/medicine_patients/<int:id>')
+@login_required
+def medicine_patients(id):
+    patients = PatientMedicines.query.filter_by(medicine_id=id).all()
+    patient_ids = [patient.id for patient in patients]
+    medicine = Medicines.query.get(id)
+    columns = Patients.__table__.columns
+    values = []
+    for patient_id in patient_ids:
+        patient = Patients.query.get(patient_id)
+        print(patient)
+        values.append([getattr(patient, column.name) for column in columns])
+
+    return render_template('admin/medicines/medicine_patients.html', patients=patients, medicine=medicine, columns=columns, values=values)
+
+
 
 @admin.route('/wards', methods=['GET', 'POST'])
 @login_required
@@ -324,6 +388,9 @@ def create_patient():
         if Patients.query.filter_by(mrn=mrn).first():
             flash('Patient with same MRN already exists', 'danger')
             return redirect(url_for('admin.create_patient'))
+        if ward_id == '':
+            flash('Please select a ward', 'danger')
+            return redirect(url_for('admin.create_patient'))
         date_created = pd.to_datetime(date_created).date()
 
         patient = Patients(
@@ -385,3 +452,4 @@ def delete_patient(id):
     db.session.commit()
     flash('Patient deleted successfully', 'success')
     return redirect(url_for('admin.patients'))
+
