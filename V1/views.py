@@ -1,8 +1,9 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
-from db import db
-from models import User, MedicineList, AddPatient, Wards, PatientMedicine
 from datetime import datetime
-from flask_login import login_user, logout_user, login_required
+
+from db import db
+from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask_login import login_required, login_user, logout_user
+from models import AddPatient, MedicineList, PatientMedicine, User, Wards
 
 main_blueprint = Blueprint('main', __name__)
 
@@ -104,6 +105,8 @@ def delete_medicine(id):
 
 @main_blueprint.route('/add_ward', methods=['GET', 'POST'])
 def add_ward():
+
+# pylint: disable=duplicate-code
     if request.method == 'POST':
         name = request.form['name']
         ward = Wards(name=name)
@@ -112,6 +115,7 @@ def add_ward():
         flash('Ward added!', 'success')
         return redirect(url_for('main.add_ward'))
     return render_template('add_ward.html')
+# pylint: enable=duplicate-code
 
 @main_blueprint.route('/update_ward/<int:id>', methods=['GET', 'POST'])
 def update_ward(id):
