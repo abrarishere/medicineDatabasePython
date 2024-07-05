@@ -229,14 +229,14 @@ def add_medicine_to_patient():
 @login_required
 def delete_medicine_from_patient(patient_id, medicine_id):
     patient_medicine = PatientMedicine.query.filter_by(patient_id=patient_id, medicine_id=medicine_id).first()
-    
+
     if patient_medicine:
         db.session.delete(patient_medicine)
         db.session.commit()
         flash('Medicine deleted from patient!', 'success')
     else:
         flash('Medicine not found for the patient!', 'error')
-    
+
     patient = AddPatient.query.get(patient_id)
     return redirect(url_for('main.get_patient', mrn_number=patient.mrn_number))
 

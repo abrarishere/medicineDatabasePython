@@ -98,7 +98,7 @@ def main(x, y, type_p, table_name):
         return None
 
     df = pd.DataFrame(data_dict)
-    
+
     if x not in df.columns or y not in df.columns:
         print(f'Error: {x} or {y} not in DataFrame columns')
         return None
