@@ -102,13 +102,6 @@ def change_password():
         return redirect(url_for('admin.users'))
     return render_template('admin/change_password.html', user=current_user)
 
-@admin.route('/panel')
-@login_required
-def panel():
-    return render_template('admin/panel.html')
-
-
-@admin.route('/generate_plot', methods=['GET', 'POST'])
 @login_required
 def generate_plot():
     if request.method == 'POST':
