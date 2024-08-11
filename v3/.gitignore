@@ -1,0 +1,78 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment directories
+venv/
+env/
+.venv/
+.env/
+
+# Flask instance folder
+instance/
+
+# Environment variables file
+.env
+*.env
+
+# Logs
+*.log
+logs/
+*.out
+
+# Local development settings
+config.py
+instance/config.py
+
+# Database files
+*.sqlite3
+*.db
+*.sqlite
+*.db-journal
+
+# Pytest cache
+.pytest_cache/
+.coverage
+.cache
+
+# Test and coverage reports
+htmlcov/
+coverage.xml
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# MyPy cache
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# PyCharm/IDEA
+.idea/
+
+# VS Code
+.vscode/
+
+# MacOS files
+.DS_Store
+
+# Thumbnails
+Thumbs.db
+
+# Compiled C extensions
+*.so
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+MANIFEST
+
+# Documentation
+docs/_build/
+
+# Flask session and cache files
+flask_session/
+flask_cache/
