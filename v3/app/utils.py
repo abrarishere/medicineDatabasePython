@@ -1,6 +1,9 @@
 import os
 from datetime import datetime, timedelta
 from random import choice, randint
+from flask import redirect, url_for, abort
+from flask_login import current_user
+from functools import wraps
 
 from .db import db
 from .models import Medicine, Patient, PatientMedicine, Ward
@@ -68,3 +71,13 @@ def add_random_patient_medicines(num=30):
         )
         db.session.add(patient_medicine)
     db.session.commit()
+
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not current_user.is_authenticated:
+            return redirect(url_for('auth.login'))  # Redirect to the login page if the user is not logged in
+        elif not current_user.is_admin:
+            return abort(403)  # Return a 403 Forbidden error if the user is not an admin
+        return f(*args, **kwargs)
+    return decorated_function

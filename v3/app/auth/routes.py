@@ -24,17 +24,15 @@ def login():
             user = email_user if email_user else username_user
             if check_password_hash(user.password, password):
                 login_user(user)
-                if user.is_admin:
-                    return redirect(url_for("admin.index"))
-                return redirect(url_for("home.index"))
+                return redirect(url_for("base.index"))
         flash("Invalid email or password", "error")
     return render_template("auth/login.html")
 
 def createAdmin():
-    email = "legendabrar44@gmail.com"
-    username = "admin"
-    password = "admin"
-    is_admin = True
+    email = "wow@gmail.com"
+    username = "wow"
+    password = "wow"
+    is_admin = False
     user = User.query.filter_by(email=email).first()
     if user:
         return

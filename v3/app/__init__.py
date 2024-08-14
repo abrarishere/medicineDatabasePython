@@ -6,10 +6,10 @@ from flask_login import LoginManager
 from app.admin.routes import admin
 from app.auth.models import User
 from app.auth.routes import auth
+from app.db import db
+from app.models import Medicine, Patient, PatientMedicine, Ward
+from app.routes import base
 from app.utils import load_env_file
-
-from .db import db
-from .routes import base
 
 
 def create_app():
@@ -25,7 +25,11 @@ def create_app():
     app.register_blueprint(base, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/auth')
     app.register_blueprint(admin, url_prefix='/admin')
+    
     login_manager = LoginManager()
+
+
+
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'
 
