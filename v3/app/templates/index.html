@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
+  </head>
+  <body class="bg-gray-900">
+    <header class="text-white px-8 md:px-4 sm:px-2">
+      <nav class="flex justify-between items-center h-16 shadow-sm">
+        <div class="name">
+          <a href="{{ url_for('base.index') }}">MediRegistry</a>
+        </div>
+        <div class="buttons flex gap-4">
+          <a
+            href="{{ url_for('auth.logout') }}"
+            class="py-2 px-4 border border-white rounded md:py-1 md:px-2 sm:py-1 sm:px-2 hover:bg-white hover:text-gray-900"
+            >Logout</a
+          >
+        </div>
+      </nav>
+    </header>
+
+    <div class="container h-screen flex justify-center items-center">
+      <div class="flex flex-col gap-8 items-center justify-center">
+        <div
+          class="text-white text-4xl md:text-2xl sm:text-xl text-center font-mono"
+        >
+          Welcome to MediRegistry
+        </div>
+        <form method="POST" class="flex flex-wrap gap-4">
+          <input
+            type="text"
+            class="py-2 px-4 border border-white rounded md:py-1 md:px-2 sm:py-1 sm:px-2 focus:outline-none"
+            name="search"
+            placeholder="Search for a patient"
+          />
+          <button
+            type="submit"
+            class="py-2 px-4 border border-white text-white rounded md:py-1 md:px-2 sm:py-1 sm:px-2 hover:bg-white hover:text-gray-900"
+          >
+            Search
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div class="content container">
+      {% block content %}
+      {% endblock %}
+    </div>
+
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/toastify-js"
+    ></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </body>
+</html>

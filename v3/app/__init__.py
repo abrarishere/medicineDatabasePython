@@ -1,11 +1,15 @@
 import os
 
 from flask import Flask
+from flask_login import LoginManager
 
+from app.admin.routes import admin
+from app.auth.models import User
+from app.auth.routes import auth
 from app.utils import load_env_file
 
 from .db import db
-from .routes import base_bp
+from .routes import base
 
 
 def create_app():
@@ -18,9 +22,20 @@ def create_app():
     for key in ['SECRET_KEY', 'DEBUG', 'PORT', 'SQLALCHEMY_DATABASE_URI']:
         app.config[key] = os.getenv(key)
 
-    app.register_blueprint(base_bp)
+    app.register_blueprint(base, url_prefix='/')
+    app.register_blueprint(auth, url_prefix='/auth')
+    app.register_blueprint(admin, url_prefix='/admin')
+    login_manager = LoginManager()
+    login_manager.init_app(app)
+    login_manager.login_view = 'auth.login'
 
-    db.init_app(app)
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
+
+    with app.app_context():
+        db.init_app(app)
+        db.create_all()
 
 
     return app
