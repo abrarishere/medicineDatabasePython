@@ -2,5 +2,5 @@
 **/dist
 **/build
 **/.env
-backend/models
+# backend/models
 backend/node_modules
