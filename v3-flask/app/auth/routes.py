@@ -24,6 +24,8 @@ def login():
             user = email_user if email_user else username_user
             if check_password_hash(user.password, password):
                 login_user(user)
+                if user.is_admin:
+                    return redirect(url_for('admin.index'))
                 return redirect(url_for("base.index"))
         flash("Invalid email or password", "error")
     return render_template("auth/login.html")
