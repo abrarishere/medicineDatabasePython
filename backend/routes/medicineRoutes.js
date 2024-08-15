@@ -85,7 +85,9 @@ router.get('/:id/patients', async (req, res) => {
         const medicineId = req.params.id;
 
         // Find all PatientMedicine entries with the specified medicine_id
-        const patientMedicines = await PatientMedicine.find({ medicine_id: medicineId }).populate('mr_number');
+        // const patientMedicines = await PatientMedicine.find({ medicine_id: medicineId }).populate('mr_number');
+    // mr nunber is tring not object
+        const patientMedicines = await PatientMedicine.find({ medicine_id: medicineId });
 
         if (patientMedicines.length === 0) {
             return res.status(404).json({ message: 'No patients found using this medicine' });
@@ -103,6 +105,7 @@ router.get('/:id/patients', async (req, res) => {
 
         res.json(patients);
     } catch (error) {
+        console.error('Error fetching patients:', error);
         res.status(500).json({ error: error.message });
     }
 });
