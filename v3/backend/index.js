@@ -12,6 +12,18 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+//API Key Authentication
+app.use((req, res, next) => {
+  const apiKey = req.header('x-api-key');
+  if (apiKey === process.env.API_KEY) {
+    next();
+  }
+  else {
+    res.status(401).send({ message: 'Invalid API Key' });
+  }
+});
+
+
 app.use('/patients', patientRoutes);
 app.use('/patient-medicines', patientMedicineRoutes);
 app.use('/wards', wardRoutes); // Added the missing '/' at the beginning
