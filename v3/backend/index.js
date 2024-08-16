@@ -12,22 +12,23 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-//API Key Authentication
-app.use((req, res, next) => {
+// API Key Authentication Middleware
+const apiKeyAuth = (req, res, next) => {
   const apiKey = req.header('x-api-key');
   if (apiKey === process.env.API_KEY) {
     next();
-  }
-  else {
+  } else {
     res.status(401).send({ message: 'Invalid API Key' });
   }
-});
+};
 
+// Apply API Key Authentication only to specific routes
+app.use('/patients', apiKeyAuth, patientRoutes);
+app.use('/wards', apiKeyAuth, wardRoutes);
+app.use('/medicines', apiKeyAuth, medicineRoutes);
 
-app.use('/patients', patientRoutes);
+// The /patient-medicines route does not require API key authentication
 app.use('/patient-medicines', patientMedicineRoutes);
-app.use('/wards', wardRoutes); // Added the missing '/' at the beginning
-app.use('/medicines', medicineRoutes); // Added the missing '/' at the beginning
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI).then(() => {
@@ -36,6 +37,7 @@ mongoose.connect(process.env.MONGO_URI).then(() => {
   console.log('Error connecting to MongoDB', error);
 });
 
+// Start the Server
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
 }).on('error', (error) => {
