@@ -1,1 +1,1 @@
-web: cd v3/backend && npm install && npm start
+web: cd v3/backend && npm start
