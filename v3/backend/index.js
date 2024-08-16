@@ -22,13 +22,23 @@ const apiKeyAuth = (req, res, next) => {
   }
 };
 
+
+// API Key 2 Authentication Middleware
+const apiKeyAuth2 = (req, res, next) => {
+  const apiKey = req.header('x-api-key');
+  if (apiKey === process.env.API_KEY_2) {
+    next();
+  } else {
+    res.status(401).send({ message: 'Invalid API Key' });
+  }
+};
+
 // Apply API Key Authentication only to specific routes
 app.use('/patients', apiKeyAuth, patientRoutes);
 app.use('/wards', apiKeyAuth, wardRoutes);
 app.use('/medicines', apiKeyAuth, medicineRoutes);
 
-// The /patient-medicines route does not require API key authentication
-app.use('/patient-medicines', patientMedicineRoutes);
+app.use('/patient-medicines', apiKeyAuth2, patientMedicineRoutes);
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI).then(() => {
