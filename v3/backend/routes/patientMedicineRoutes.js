@@ -81,5 +81,17 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+//Get Patient Medicine by MR Number
+router.get('/mr/:mr_number', async (req, res) => {
+  try {
+    const patientMedicine = await PatientMedicine.find({ mr_number: req.params.mr_number });
+    if (!patientMedicine) {
+      return res.status(404).json({ message: 'PatientMedicine not found' });
+    }
+    res.json(patientMedicine);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 export { router as patientMedicineRoutes };
