@@ -3,9 +3,10 @@ import PatientMedicine from "../components/PatientMedicine";
 import axios from "axios";
 import { useState } from "react";
 import { MagnifyingGlass } from "react-loader-spinner";
+import { FaHome } from "react-icons/fa";
 
 const Home = () => {
-  const [patient, setPatient] = useState();
+  const [patient, setPatient] = useState(null);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -13,6 +14,11 @@ const Home = () => {
   const url = "https://pharmacy-medicines-edc013fd241d.herokuapp.com/patients/mr";
 
   const getData = async (search) => {
+    if (!search.trim()) {
+      alert("Please enter a valid MRN.");
+      return;
+    }
+
     setLoading(true);
     try {
       const response = await axios.get(`${url}/${search}`, {
@@ -20,16 +26,25 @@ const Home = () => {
           "x-api-key": apiKey,
         },
       });
-      setPatient(response.data);
-      setLoading(false);
+      if (response.data) {
+        setPatient(response.data);
+        alert("Data fetched successfully.");
+      } else {
+        alert("No data found for the given MRN.");
+        setPatient(null);
+      }
     } catch (error) {
+      alert(`Error fetching data: ${error.message}`);
+    } finally {
       setLoading(false);
-      console.error("Error fetching data:", error);
     }
   };
 
   return (
-    <div className="w-full h-screen flex justify-center bg-[#151515] text-white p-4 overflow-hidden">
+    <div className="w-full min-h-screen flex justify-center bg-[#151515] text-white p-4">
+      <div className="fixed top-4 left-4">
+        <FaHome className="text-4xl cursor-pointer" onClick={() => window.location.reload()} />
+      </div>
       <div className="flex flex-col items-center mt-20 gap-4">
         <div className="search flex gap-2 justify-center items-center rounded-lg bg-[#2f2f2f] p-2 text-white hover:bg-[#3f3f3f] active:bg-[#1f1f1f]">
           <input
@@ -42,12 +57,13 @@ const Home = () => {
           <button
             className="px-2 py-1 hover:bg-[#3f3f3f] rounded-lg"
             onClick={() => getData(search)}
-            disabled={!search}
+            disabled={!search.trim()}
           >
             <FaSearch />
           </button>
         </div>
-        <div className="w-full h-[80vh] overflow-y-auto">
+
+        <div className="w-full min-h-[80vh] overflow-y-auto">
           {loading ? (
             <div className="flex justify-center items-center h-full">
               <MagnifyingGlass
@@ -55,14 +71,12 @@ const Home = () => {
                 height="80"
                 width="80"
                 ariaLabel="magnifying-glass-loading"
-                wrapperStyle={{}}
-                wrapperClass="magnifying-glass-wrapper"
                 glassColor="#c0efff"
                 color="#e15b64"
               />
             </div>
           ) : patient ? (
-              <PatientMedicine patient={patient} />
+            <PatientMedicine patient={patient} />
           ) : (
             <div className="flex justify-center items-center h-full">
               <p>No data found</p>
