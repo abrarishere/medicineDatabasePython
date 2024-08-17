@@ -9,8 +9,8 @@ const Home = () => {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const apiKey = import.meta.env.VITE_API_KEY_2;
-  const url = "https://pharmacy-medicines-edc013fd241d.herokuapp.com/patient-medicines/mr";
+  const apiKey = import.meta.env.VITE_API_KEY;
+  const url = "https://pharmacy-medicines-edc013fd241d.herokuapp.com/patients/mr";
 
   const getData = async (search) => {
     setLoading(true);
