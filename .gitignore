@@ -4,4 +4,4 @@
 **/.env
 # backend/models
 backend/node_modules
-v3/frontend/src/pages
+v3/frontend/
