@@ -4,7 +4,6 @@ import axios from "axios";
 import { useState } from "react";
 import { MagnifyingGlass } from "react-loader-spinner";
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { FaHome } from "react-icons/fa";
 
 const Home = () => {
