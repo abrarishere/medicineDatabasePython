@@ -6,6 +6,8 @@ import { patientRoutes } from './routes/patientRoutes.js';
 import { patientMedicineRoutes } from './routes/patientMedicineRoutes.js';
 import { medicineRoutes } from './routes/medicineRoutes.js';
 import { wardRoutes } from './routes/wardRoutes.js';
+imp
+import { userRoutes } from './routes/userRoutes.js';
 
 configDotenv();
 const app = express();
@@ -29,6 +31,7 @@ app.use('/wards', apiKeyAuth, wardRoutes);
 app.use('/medicines', apiKeyAuth, medicineRoutes);
 
 app.use('/patient-medicines', apiKeyAuth, patientMedicineRoutes);
+app.use('/users', apiKeyAuth, userRoutes);
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI).then(() => {

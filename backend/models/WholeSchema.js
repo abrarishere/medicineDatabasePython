@@ -116,10 +116,24 @@ WardSchema.methods.toString = function() {
     return `<Ward ${this.ward_name}>`;
 };
 
+const userSchema = new Schema({
+    username: {
+        type: String,
+        required: true,
+        unique: true,
+        maxlength: 100
+    },
+    password: {
+        type: String,
+        required: true
+    }
+});
+
 // Define Models
 const Medicine = mongoose.model('Medicine', MedicineSchema);
 const Patient = mongoose.model('Patient', PatientSchema);
 const PatientMedicine = mongoose.model('PatientMedicine', PatientMedicineSchema);
 const Ward = mongoose.model('Ward', WardSchema);
+const User = mongoose.model('User', userSchema);
 
-export { Medicine, Patient, PatientMedicine, Ward };
+export { Medicine, Patient, PatientMedicine, Ward, User };

@@ -3,6 +3,8 @@ import PatientMedicine from "../components/PatientMedicine";
 import axios from "axios";
 import { useState } from "react";
 import { MagnifyingGlass } from "react-loader-spinner";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { FaHome } from "react-icons/fa";
 
 const Home = () => {
@@ -15,7 +17,7 @@ const Home = () => {
 
   const getData = async (search) => {
     if (!search.trim()) {
-      alert("Please enter a valid MRN.");
+      toast.error("Please enter a valid MRN.");
       return;
     }
 
@@ -26,15 +28,15 @@ const Home = () => {
           "x-api-key": apiKey,
         },
       });
-      if (response.data) {
+      if (response.data && response.data.length > 0) {
         setPatient(response.data);
-        alert("Data fetched successfully.");
+        toast.success("Data fetched successfully.");
       } else {
-        alert("No data found for the given MRN.");
+        toast.warn("No data found for the given MRN.");
         setPatient(null);
       }
     } catch (error) {
-      alert(`Error fetching data: ${error.message}`);
+      toast.error(`Error fetching data: ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -42,6 +44,7 @@ const Home = () => {
 
   return (
     <div className="w-full min-h-screen flex justify-center bg-[#151515] text-white p-4">
+      <ToastContainer />
       <div className="fixed top-4 left-4">
         <FaHome className="text-4xl cursor-pointer" onClick={() => window.location.reload()} />
       </div>
