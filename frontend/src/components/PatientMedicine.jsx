@@ -20,7 +20,11 @@ const PatientMedicine = ({ patient }) => {
   const [wardData, setWardData] = useState(null);
   const [medData, setMedData] = useState(null);
   const [detailsVisible, setDetailsVisible] = useState(false);
-  const [medicines, setMedicines] = useState([{ medicine_id: '', quantity: 1, date: new Date().toISOString().split('T')[0] }]);
+  const [medicines, setMedicines] = useState([{
+    medicine_id: '',
+    quantity: 1,
+    date: new Date().toISOString() // Keep full ISO date including time
+  }]);
   const [submitting, setSubmitting] = useState(false);
   const apiKey = import.meta.env.VITE_API_KEY;
   const url_wards = 'https://pharmacy-medicines-edc013fd241d.herokuapp.com/wards';
@@ -45,7 +49,7 @@ const PatientMedicine = ({ patient }) => {
       .finally(() => setLoading(false));
   }, [apiKey]);
 
-  const handleAddRow = () => setMedicines([...medicines, { medicine_id: '', quantity: 1, date: new Date().toISOString().split('T')[0] }]);
+  const handleAddRow = () => setMedicines([...medicines, { medicine_id: '', quantity: 1, date: new Date().toISOString() }]);
 
   const handleChange = (index, e) => {
     const { name, value } = e.target;
@@ -61,16 +65,26 @@ const PatientMedicine = ({ patient }) => {
         mr_number: patient[0].mr_number,
         medicine_id: medicine.medicine_id,
         quantity: medicine.quantity,
-        date: medicine.date,
-      }, { headers: { 'x-api-key': apiKey } })
+        date: medicine.date
+      }, {
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey 
+        }
+      })
     ))
       .then(() => {
-        setMedicines([{ medicine_id: '', quantity: 1, date: new Date().toISOString().split('T')[0] }]);
+        setMedicines([{ medicine_id: '', quantity: 1, date: new Date().toISOString() }]);
         alert('Medicines added successfully.');
       })
-      .catch(error => alert(`Error submitting medicines: ${error.message}`))
+      .catch(error => {
+        alert(`Error submitting medicines: ${error}`);
+        console.error(error);
+      })
       .finally(() => setSubmitting(false));
   };
+
+  const isSubmitDisabled = submitting || medicines.some(medicine => !medicine.medicine_id);
 
   if (!patient?.length) return <div className="text-center text-gray-400">No patient data available.</div>;
 
@@ -127,7 +141,7 @@ const PatientMedicine = ({ patient }) => {
                   ))}
                 </select>
                 <input type="number" name="quantity" value={medicine.quantity} onChange={(e) => handleChange(index, e)} placeholder="Quantity" className="p-2 rounded bg-gray-700 text-white flex-1" />
-                <input type="date" name="date" value={medicine.date} onChange={(e) => handleChange(index, e)} className="hidden" />
+                <input type="date" name="date" value={medicine.date.split('T')[0]} onChange={(e) => handleChange(index, e)} className="hidden" />
                 <button onClick={() => setMedicines(medicines.filter((_, i) => i !== index))} className={`text-xl ${medicines.length > 1 ? 'text-red-400' : 'text-gray-500 cursor-not-allowed'}`} disabled={medicines.length <= 1}>
                   <FaMinus />
                 </button>
@@ -136,7 +150,7 @@ const PatientMedicine = ({ patient }) => {
                 </button>
               </div>
             ))}
-            <button onClick={handleSubmit} className="bg-green-500 text-white py-2 px-4 rounded w-full flex justify-center items-center" disabled={submitting}>
+            <button onClick={handleSubmit} className="bg-green-500 text-white py-2 px-4 rounded w-full flex justify-center items-center" disabled={isSubmitDisabled} >
               {submitting ? <MagnifyingGlass visible height="24" width="24" ariaLabel="Submitting..." color="#fff" /> : 'Submit'}
             </button>
           </div>
@@ -146,6 +160,6 @@ const PatientMedicine = ({ patient }) => {
       </div>
     </div>
   );
-};
+}
 
 export default PatientMedicine;

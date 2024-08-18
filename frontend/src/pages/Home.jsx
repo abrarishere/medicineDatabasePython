@@ -46,7 +46,7 @@ const Home = () => {
         <FaHome className="text-4xl cursor-pointer" onClick={() => window.location.reload()} />
       </div>
       <div className="flex flex-col items-center mt-20 gap-4">
-        <div className="search flex gap-2 justify-center items-center rounded-lg bg-[#2f2f2f] p-2 text-white hover:bg-[#3f3f3f] active:bg-[#1f1f1f]">
+        <div className="search flex gap-2 justify-center items-center rounded-lg bg-[#2f2f2f] text-white hover:bg-[#3f3f3f] active:bg-[#1f1f1f] overflow-hidden">
           <input
             type="text"
             placeholder="Search for a MRN"
@@ -55,7 +55,7 @@ const Home = () => {
             onChange={(e) => setSearch(e.target.value)}
           />
           <button
-            className="px-2 py-1 hover:bg-[#3f3f3f] rounded-lg"
+            className="p-4 hover:bg-[#3f3f3f] rounded-lg"
             onClick={() => getData(search)}
             disabled={!search.trim()}
           >
