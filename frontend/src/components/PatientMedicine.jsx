@@ -93,6 +93,8 @@ const PatientMedicine = ({ patient }) => {
           { medicine_id: "", quantity: 1, date: new Date().toISOString() },
         ]);
         toast.success("Medicines added successfully.");
+        //Reload Page
+        window.location.reload();
       })
       .catch((error) => {
         toast.error(`Error submitting medicines: ${error}`);
@@ -122,9 +124,34 @@ const PatientMedicine = ({ patient }) => {
 
   return (
     <div className="container mx-auto p-6">
-      <PatientDetails patient={patient} wardData={wardData} detailsVisible={detailsVisible} setDetailsVisible={setDetailsVisible} mr_number={mr_number} name={name} father_name={father_name} gender={gender} age={age} phone_number={phone_number} ward_name={ward_name} created_at={created_at} updated_at={updated_at} formattedCreatedAt={formattedCreatedAt} formattedUpdatedAt={formattedUpdatedAt} />
+      <PatientDetails
+        patient={patient}
+        wardData={wardData}
+        detailsVisible={detailsVisible}
+        setDetailsVisible={setDetailsVisible}
+        mr_number={mr_number}
+        name={name}
+        father_name={father_name}
+        gender={gender}
+        age={age}
+        phone_number={phone_number}
+        ward_name={ward_name}
+        created_at={created_at}
+        updated_at={updated_at}
+        formattedCreatedAt={formattedCreatedAt}
+        formattedUpdatedAt={formattedUpdatedAt}
+      />
 
-      <AddMedicine medData={medData} medicines={medicines} setMedicines={setMedicines} handleAddRow={handleAddRow} handleChange={handleChange} isSubmitDisabled={isSubmitDisabled} handleSubmit={handleSubmit} submitting={submitting} />
+      <AddMedicine
+        medData={medData}
+        medicines={medicines}
+        setMedicines={setMedicines}
+        handleAddRow={handleAddRow}
+        handleChange={handleChange}
+        isSubmitDisabled={isSubmitDisabled}
+        handleSubmit={handleSubmit}
+        submitting={submitting}
+      />
     </div>
   );
 };
