@@ -42,5 +42,14 @@ router.post('/login', async (req, res) => {
     }
 });
 
-
-export { router as userRoutes };
+//Create a user
+router.post('/create', async (req, res) => {
+    try {
+        const { username, password } = req.body;
+        const user = new User({ username, password });
+        await user.save();
+        res.status(201).json(user);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+}
