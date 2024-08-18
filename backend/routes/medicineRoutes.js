@@ -68,12 +68,19 @@ router.put('/:id', async (req, res) => {
 // DELETE /medicines/:id - Delete a specific medicine by ID
 router.delete('/:id', async (req, res) => {
     try {
+        // Find the medicine by ID
         const medicine = await Medicine.findById(req.params.id);
         if (!medicine) {
             return res.status(404).json({ message: 'Medicine not found' });
         }
+        
+        // Delete all PatientMedicine records related to this medicine
+        await PatientMedicine.deleteMany({ medicine_id: req.params.id });
+
+        // Delete the medicine itself
         await medicine.deleteOne();
-        res.json({ message: 'Medicine deleted successfully' });
+        
+        res.json({ message: 'Medicine deleted successfully along with related patient medicines' });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

@@ -1,5 +1,5 @@
 import express from 'express';
-import { Ward, Patient } from '../models/WholeSchema.js';
+import { Ward, Patient, PatientMedicine, Medicine} from '../models/WholeSchema.js';
 const router = express.Router();
 
 // GET /wards - Retrieve all wards
@@ -69,7 +69,20 @@ router.delete('/:id', async (req, res) => {
     if (!ward) {
       return res.status(404).json({ message: 'Ward not found' });
     }
+    
+    // Find all patients in the ward
+    const patients = await Patient.find({ ward_id: req.params.id });
+    const mrNumbers = patients.map(patient => patient.mr_number);
+    
+    // Delete all related PatientMedicine records
+    await PatientMedicine.deleteMany({ mr_number: { $in: mrNumbers } });
+    
+    // Delete all patients in the ward
+    await Patient.deleteMany({ ward_id: req.params.id });
+    
+    // Delete the ward itself
     await ward.deleteOne();
+    
     res.json({ message: 'Ward deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });

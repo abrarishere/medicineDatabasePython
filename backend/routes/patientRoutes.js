@@ -84,12 +84,19 @@ router.put('/:id', async (req, res) => {
 // DELETE /patients/:id - Delete a specific patient by ID
 router.delete('/:id', async (req, res) => {
   try {
+    // Find the patient by ID
     const patient = await Patient.findById(req.params.id);
     if (!patient) {
       return res.status(404).json({ message: 'Patient not found' });
     }
+
+    // Delete all PatientMedicine records related to this patient
+    await PatientMedicine.deleteMany({ mr_number: patient.mr_number });
+
+    // Delete the patient
     await patient.deleteOne();
-    res.json({ message: 'Patient deleted successfully' });
+
+    res.json({ message: 'Patient and related records deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
