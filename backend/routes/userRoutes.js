@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { User } from '../models/WholeSchema';
+import { User } from '../models/WholeSchema.js';
 
 const router = express.Router();
 
