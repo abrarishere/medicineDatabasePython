@@ -6,7 +6,6 @@ import { patientRoutes } from './routes/patientRoutes.js';
 import { patientMedicineRoutes } from './routes/patientMedicineRoutes.js';
 import { medicineRoutes } from './routes/medicineRoutes.js';
 import { wardRoutes } from './routes/wardRoutes.js';
-imp
 import { userRoutes } from './routes/userRoutes.js';
 
 configDotenv();
