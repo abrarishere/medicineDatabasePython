@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import AddMedicine from "./PatientMedicine/AddMedicine";
 import PatientDetails from "./PatientMedicine/PatientDetails";
+import { MagnifyingGlass } from "react-loader-spinner";
 
 const PatientMedicine = ({ patient }) => {
   const [loading, setLoading] = useState(false);
@@ -93,7 +94,7 @@ const PatientMedicine = ({ patient }) => {
           { medicine_id: "", quantity: 1, date: new Date().toISOString() },
         ]);
         toast.success("Medicines added successfully.");
-        //Reload Page
+        // Reload Page
         window.location.reload();
       })
       .catch((error) => {
@@ -124,34 +125,49 @@ const PatientMedicine = ({ patient }) => {
 
   return (
     <div className="container mx-auto p-6">
-      <PatientDetails
-        patient={patient}
-        wardData={wardData}
-        detailsVisible={detailsVisible}
-        setDetailsVisible={setDetailsVisible}
-        mr_number={mr_number}
-        name={name}
-        father_name={father_name}
-        gender={gender}
-        age={age}
-        phone_number={phone_number}
-        ward_name={ward_name}
-        created_at={created_at}
-        updated_at={updated_at}
-        formattedCreatedAt={formattedCreatedAt}
-        formattedUpdatedAt={formattedUpdatedAt}
-      />
+      {loading ? (
+        <div className="flex items-center justify-center w-full h-full">
+          <MagnifyingGlass
+            visible={true}
+            height="80"
+            width="80"
+            ariaLabel="Magnifying Glass loading"
+            glassColor="#c0efff"
+            color="#e15b64"
+          />
+        </div>
+      ) : (
+        <>
+          <PatientDetails
+            patient={patient}
+            wardData={wardData}
+            detailsVisible={detailsVisible}
+            setDetailsVisible={setDetailsVisible}
+            mr_number={mr_number}
+            name={name}
+            father_name={father_name}
+            gender={gender}
+            age={age}
+            phone_number={phone_number}
+            ward_name={ward_name}
+            created_at={created_at}
+            updated_at={updated_at}
+            formattedCreatedAt={formattedCreatedAt}
+            formattedUpdatedAt={formattedUpdatedAt}
+          />
 
-      <AddMedicine
-        medData={medData}
-        medicines={medicines}
-        setMedicines={setMedicines}
-        handleAddRow={handleAddRow}
-        handleChange={handleChange}
-        isSubmitDisabled={isSubmitDisabled}
-        handleSubmit={handleSubmit}
-        submitting={submitting}
-      />
+          <AddMedicine
+            medData={medData}
+            medicines={medicines}
+            setMedicines={setMedicines}
+            handleAddRow={handleAddRow}
+            handleChange={handleChange}
+            isSubmitDisabled={isSubmitDisabled}
+            handleSubmit={handleSubmit}
+            submitting={submitting}
+          />
+        </>
+      )}
     </div>
   );
 };

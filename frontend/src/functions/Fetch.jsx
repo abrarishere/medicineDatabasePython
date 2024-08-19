@@ -21,12 +21,19 @@ function fetchMedicines() {
     });
 }
 
-function fetchMedicinePatients(id) {
-    return axios.get(`${MED_URL}/${id}/patients`, {
-        headers: {
-            'x-api-key': API_KEY
+async function fetchMedicinePatients(id) {
+  try {
+        return await axios.get(`${MED_URL}/${id}/patients`, {
+            headers: {
+                'x-api-key': API_KEY
+            }
+        });
+    } catch (error) {
+        if (error.response && error.response.status === 404) {
+            return { data: [] }; // Return an empty array if 404
         }
-    });
+        throw error;
+    }
 }
 
 function fetchWards() {

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { FaMedkit, FaWarehouse, FaUser, FaUserInjured, FaHome } from 'react-icons/fa';
 import Medicines from '../components/Dashboard/Medicines/Medicines';
 import Wards from '../components/Dashboard/Wards/Wards';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Dashboard = () => {
@@ -29,6 +29,7 @@ const Dashboard = () => {
 
   return (
     <div className="container w-full min-h-screen flex flex-col items-center bg-[#141414] text-white">
+      <ToastContainer />
       <nav className="flex w-full bg-[#161616] justify-evenly items-center py-2">
         {navItems.map(({ id, icon: Icon }) => (
           <div
