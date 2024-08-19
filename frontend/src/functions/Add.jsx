@@ -22,4 +22,13 @@ function addMedicine(data) {
     });
 }
 
-export { addMedicine };
+function addWard(data) {
+    return axios.post(WARD_URL, data, {
+        headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': API_KEY
+        }
+    });
+}
+
+export { addMedicine, addWard };

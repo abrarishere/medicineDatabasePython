@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import AddMedicine from "./PatientMedicine/AddMedicine";
+import AddPatientMedicine from "./PatientMedicine/AddPatientMedicine";
 import PatientDetails from "./PatientMedicine/PatientDetails";
 import { MagnifyingGlass } from "react-loader-spinner";
 
@@ -156,7 +156,7 @@ const PatientMedicine = ({ patient }) => {
             formattedUpdatedAt={formattedUpdatedAt}
           />
 
-          <AddMedicine
+          <AddPatientMedicine
             medData={medData}
             medicines={medicines}
             setMedicines={setMedicines}
