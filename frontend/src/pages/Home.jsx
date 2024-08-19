@@ -1,4 +1,4 @@
-import { FaSearch } from "react-icons/fa";
+import { FaDashcube, FaSearch } from "react-icons/fa";
 import PatientMedicine from "../components/PatientMedicine";
 import axios from "axios";
 import { useState } from "react";
@@ -46,6 +46,7 @@ const Home = () => {
       <ToastContainer />
       <div className="fixed top-4 left-4">
         <FaHome className="text-4xl cursor-pointer" onClick={() => window.location.reload()} />
+        <FaDashcube className="text-4xl cursor-pointer" onClick={() => window.location.href = "/dashboard"} />
       </div>
       <div className="flex flex-col items-center mt-20 gap-4">
         <div className="search flex gap-2 justify-center items-center rounded-lg bg-[#2f2f2f] text-white hover:bg-[#3f3f3f] active:bg-[#1f1f1f] overflow-hidden">
