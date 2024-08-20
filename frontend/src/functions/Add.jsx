@@ -31,4 +31,13 @@ function addWard(data) {
     });
 }
 
-export { addMedicine, addWard };
+function addPatient(data) {
+    return axios.post(PAT_URL, data, {
+        headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': API_KEY
+        }
+    });
+}
+
+export { addMedicine, addWard, addPatient };

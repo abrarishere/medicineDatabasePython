@@ -10,6 +10,9 @@ const WARD_URL =
 const PAT_URL =
     "https://pharmacy-medicines-edc013fd241d.herokuapp.com/patients";
 
+const PAT_MED_URL =
+    "https://pharmacy-medicines-edc013fd241d.herokuapp.com/patient-medicines";
+
 
 const API_KEY = import.meta.env.VITE_API_KEY;
 
@@ -44,6 +47,14 @@ function fetchWards() {
     });
 }
 
+function fetchWardById(id) {
+    return axios.get(`${WARD_URL}/${id}`, {
+        headers: {
+            'x-api-key': API_KEY
+        }
+    });
+}
+
 function fetchWardPatients(id) {
     return axios.get(`${WARD_URL}/${id}/patients`, {
         headers: {
@@ -60,4 +71,12 @@ function fetchPatients() {
     });
 }
 
-export { fetchMedicines, fetchPatients, fetchWards, fetchMedicinePatients, fetchWardPatients };
+function fetchPatientMedicines(id) {
+    return axios.get(`${PAT_URL}/${id}/medicines`, {
+        headers: {
+            'x-api-key': API_KEY
+        }
+    });
+}
+
+export { fetchMedicines, fetchPatients, fetchWards, fetchWardById, fetchMedicinePatients, fetchWardPatients, fetchPatientMedicines };

@@ -4,6 +4,7 @@ import Medicines from '../components/Dashboard/Medicines/Medicines';
 import Wards from '../components/Dashboard/Wards/Wards';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Patients from '../components/Dashboard/Patients/Patients';
 
 const Dashboard = () => {
   const [selectedNav, setSelectedNav] = useState('home');
@@ -11,17 +12,19 @@ const Dashboard = () => {
   const navItems = [
     { id: 'home', icon: FaHome },
     { id: 'medicines', icon: FaMedkit },
-    { id: 'warehouse', icon: FaWarehouse },
-    { id: 'user', icon: FaUser },
-    { id: 'patients', icon: FaUserInjured }
+    { id: 'wards', icon: FaWarehouse },
+    { id: 'patients', icon: FaUser },
+    { id: 'patient-medicines', icon: FaUserInjured }
   ];
 
   const renderContent = () => {
     switch (selectedNav) {
       case 'medicines':
         return <Medicines />;
-      case 'warehouse':
+      case 'wards':
         return <Wards />;
+      case 'patients':
+        return <Patients />;
       default:
         return <div className="text-xl">Welcome to the Dashboard</div>;
     }

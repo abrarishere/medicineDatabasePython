@@ -29,4 +29,12 @@ function deleteWard(id) {
     });
 }
 
-export { deleteMedicine, deleteWard };
+function deletePatient(id) {
+    return axios.delete(`${PAT_URL}/${id}`, {
+        headers: {
+            'x-api-key': API_KEY
+        }
+    });
+}
+
+export { deleteMedicine, deleteWard, deletePatient };
