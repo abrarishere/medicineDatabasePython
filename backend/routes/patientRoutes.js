@@ -105,33 +105,37 @@ router.delete('/:id', async (req, res) => {
 // GET /patients/:id/medicines - Retrieve all medicines for a specific patient
 router.get('/:id/medicines', async (req, res) => {
   try {
-    const patientId = req.params.id;
+    const userId = req.params.id;
 
-    // Find all PatientMedicine entries for the specified patient
-    const patientMedicines = await PatientMedicine.find({ mr_number: patientId })
-      .populate('medicine_id');  // Populate medicine details
+    // Step 1: Get the patient record by user ID to fetch the associated mr_number
+    const patient = await Patient.findById(userId);
+
+    if (!patient) {
+      return res.status(404).json({ message: 'Patient not found' });
+    }
+
+    const mrNumber = patient.mr_number;
+
+    // Step 2: Find all PatientMedicine entries for the specified mr_number
+    const patientMedicines = await PatientMedicine.find({ mr_number: mrNumber });
 
     if (patientMedicines.length === 0) {
       return res.status(404).json({ message: 'No medicines found for this patient' });
     }
 
-    // Use a Set to avoid duplicate medicines based on medicine_id
-    const uniqueMedicines = new Map();
-    patientMedicines.forEach(pm => {
-      if (!uniqueMedicines.has(pm.medicine_id._id.toString())) {
-        uniqueMedicines.set(pm.medicine_id._id.toString(), {
-          medicine: pm.medicine_id,
-          quantity: pm.quantity,
-          date: pm.date
-        });
-      }
-    });
+    // Step 3: Extract unique medicine IDs
+    const uniqueMedicineIds = [...new Set(patientMedicines.map(pm => pm.medicine_id.toString()))];
 
-    // Convert the map values to an array
-    const medicines = Array.from(uniqueMedicines.values());
+    // Step 4: Retrieve the full medicine details for each unique medicine_id
+    const medicines = await Medicine.find({ _id: { $in: uniqueMedicineIds } });
+
+    if (medicines.length === 0) {
+      return res.status(404).json({ message: 'No medicines found' });
+    }
 
     res.json(medicines);
   } catch (error) {
+    console.error('Error fetching medicines:', error);
     res.status(500).json({ error: error.message });
   }
 });
