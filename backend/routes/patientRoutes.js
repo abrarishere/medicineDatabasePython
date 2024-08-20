@@ -107,7 +107,7 @@ router.get('/:id/medicines', async (req, res) => {
   try {
     const userId = req.params.id;
 
-    // Step 1: Get the patient record by user ID to fetch the associated mr_number
+    // Find the patient by ID
     const patient = await Patient.findById(userId);
 
     if (!patient) {
@@ -116,24 +116,36 @@ router.get('/:id/medicines', async (req, res) => {
 
     const mrNumber = patient.mr_number;
 
-    // Step 2: Find all PatientMedicine entries for the specified mr_number
+    // Find all medicines related to the patient
     const patientMedicines = await PatientMedicine.find({ mr_number: mrNumber });
 
     if (patientMedicines.length === 0) {
       return res.status(404).json({ message: 'No medicines found for this patient' });
     }
 
-    // Step 3: Extract unique medicine IDs
+    // Extract unique medicine IDs
     const uniqueMedicineIds = [...new Set(patientMedicines.map(pm => pm.medicine_id.toString()))];
 
-    // Step 4: Retrieve the full medicine details for each unique medicine_id
+    // Fetch medicine details
     const medicines = await Medicine.find({ _id: { $in: uniqueMedicineIds } });
 
     if (medicines.length === 0) {
       return res.status(404).json({ message: 'No medicines found' });
     }
 
-    res.json(medicines);
+    // Create a map of medicine IDs to their quantities
+    const medicineQuantities = patientMedicines.reduce((acc, pm) => {
+      acc[pm.medicine_id.toString()] = pm.quantity;
+      return acc;
+    }, {});
+
+    // Update medicine details with quantities
+    const updatedMedicines = medicines.map(medicine => ({
+      ...medicine.toObject(),
+      quantity: medicineQuantities[medicine._id.toString()] || 0
+    }));
+
+    res.json(updatedMedicines);
   } catch (error) {
     console.error('Error fetching medicines:', error);
     res.status(500).json({ error: error.message });
