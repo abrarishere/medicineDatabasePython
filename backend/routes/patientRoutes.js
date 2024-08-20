@@ -108,18 +108,27 @@ router.get('/:id/medicines', async (req, res) => {
     const patientId = req.params.id;
 
     // Find all PatientMedicine entries for the specified patient
-    const patientMedicines = await PatientMedicine.find({ mr_number: patientId }).populate('medicine_id');
+    const patientMedicines = await PatientMedicine.find({ mr_number: patientId })
+      .populate('medicine_id');  // Populate medicine details
 
     if (patientMedicines.length === 0) {
       return res.status(404).json({ message: 'No medicines found for this patient' });
     }
 
-    // Extract medicines details from PatientMedicine
-    const medicines = patientMedicines.map(pm => ({
-      medicine: pm.medicine_id,
-      quantity: pm.quantity,
-      date: pm.date
-    }));
+    // Use a Set to avoid duplicate medicines based on medicine_id
+    const uniqueMedicines = new Map();
+    patientMedicines.forEach(pm => {
+      if (!uniqueMedicines.has(pm.medicine_id._id.toString())) {
+        uniqueMedicines.set(pm.medicine_id._id.toString(), {
+          medicine: pm.medicine_id,
+          quantity: pm.quantity,
+          date: pm.date
+        });
+      }
+    });
+
+    // Convert the map values to an array
+    const medicines = Array.from(uniqueMedicines.values());
 
     res.json(medicines);
   } catch (error) {
