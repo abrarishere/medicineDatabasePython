@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import PatientCard from "./PatientCard";
 import { deletePatient } from "../../../functions/Delete";
 import { FaPlus } from "react-icons/fa";
-import { addPatient } from "../../../functions/Add";
+import AddPatient from "./AddPatient";
 
 const Patients = () => {
   const [patients, setPatients] = useState([]);
@@ -19,21 +19,17 @@ const Patients = () => {
       setLoading(true);
       const response = await fetchPatients();
       setPatients(response.data);
-      setLoading(false);
     } catch {
-      setLoading(false);
       toast.error("Failed to fetch patients");
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleDoubleClick = (id) => {
     navigator.clipboard.writeText(id).then(
-      () => {
-        toast.success("Copied to clipboard");
-      },
-      () => {
-        toast.error("Failed to copy to clipboard");
-      },
+      () => toast.success("Copied to clipboard"),
+      () => toast.error("Failed to copy to clipboard")
     );
   };
 
@@ -56,7 +52,6 @@ const Patients = () => {
         },
         {
           label: "No",
-          onClick: () => {},
         },
       ],
     });
@@ -69,13 +64,11 @@ const Patients = () => {
   return (
     <div className="container w-full min-h-screen flex flex-col p-4 text-white">
       <ToastContainer />
-
+      
       <div className="flex justify-end w-full mb-4">
         <button
           className="bg-gray-600 text-white p-2 rounded-full hover:bg-gray-700 transition-all duration-200"
-          onClick={() => {
-            setIsAddPatientModalOpen(true);
-          }}
+          onClick={() => setIsAddPatientModalOpen(true)}
         >
           <FaPlus />
         </button>
@@ -122,7 +115,7 @@ const Patients = () => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="9" className="text-center py-4">
+                    <td colSpan="11" className="text-center py-4">
                       No records found.
                     </td>
                   </tr>
@@ -131,6 +124,12 @@ const Patients = () => {
             </table>
           </div>
         </div>
+      )}
+      {isAddPatientModalOpen && (
+        <AddPatient
+          onClose={() => setIsAddPatientModalOpen(false)}
+          onPatientAdded={loadPatients}
+        />
       )}
     </div>
   );

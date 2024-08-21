@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { fetchWardById, fetchPatientMedicines } from "../../../functions/Fetch";
-import { MagnifyingGlass } from "react-loader-spinner";
 import MedicineModal from "./MedicineModal";
 import { FaTrash } from "react-icons/fa";
 
@@ -8,7 +7,7 @@ const PatientCard = ({ patient, handleDoubleClick, handleDelete }) => {
   const [wardName, setWardName] = useState("");
   const [patientMedicines, setPatientMedicines] = useState([]);
   const [isMedicineModalOpen, setIsMedicineModalOpen] = useState(false);
-  const [loading, isloading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const getWardName = async () => {
     try {
@@ -18,23 +17,21 @@ const PatientCard = ({ patient, handleDoubleClick, handleDelete }) => {
       setWardName("N/A");
       console.log(error.message);
     }
-  }
+  };
 
   const getPatientMedicines = async () => {
-    isloading(true);
+    setLoading(true);
     try {
-      
       const response = await fetchPatientMedicines(patient._id);
       setPatientMedicines(response.data);
-      isloading(false);
     } catch (error) {
-      isloading(false);
       console.log(error.message);
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
-  const formatDate = (date) => { return new Date(date).toLocaleString('en-US');} 
-
+  const formatDate = (date) => new Date(date).toLocaleString('en-US');
 
   useEffect(() => {
     getWardName();
@@ -69,20 +66,6 @@ const PatientCard = ({ patient, handleDoubleClick, handleDelete }) => {
           onClose={() => setIsMedicineModalOpen(false)}
           medicines={patientMedicines}
         />
-      )}
-
-      {loading && (
-        <div className="flex justify-center items-center">
-          <MagnifyingGlass 
-            visible={true} 
-            height="50" 
-            width="50" 
-            ariaLabel="MagnifyingGlass-loading" 
-            wrapperClass="MagnifyingGlass-wrapper"
-            glassColor='#c0efff'
-            color='#1e1e1d' 
-          />
-        </div>
       )}
 
     </>
