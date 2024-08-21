@@ -43,7 +43,19 @@ const Home = () => {
 
   return (
     <div className="w-full min-h-screen flex justify-center bg-[#151515] text-white p-4">
-      <ToastContainer />
+      <ToastContainer
+        position="top-right"
+        autoClose={1000}
+        limit={2}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
       <div className="fixed top-4 left-4">
         <FaHome className="text-4xl cursor-pointer" onClick={() => window.location.reload()} />
       </div>

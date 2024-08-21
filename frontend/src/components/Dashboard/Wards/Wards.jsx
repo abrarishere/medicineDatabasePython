@@ -107,7 +107,19 @@ const Wards = () => {
 
   return (
     <div className="container w-full min-h-screen flex flex-col text-white p-4">
-      <ToastContainer />
+      <ToastContainer
+        position="top-right"
+        autoClose={1000}
+        limit={2}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
       <div className="flex items-center mb-4 p-2 bg-gray-700 rounded-md">
         <input
           type="text"

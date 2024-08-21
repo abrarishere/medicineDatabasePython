@@ -26,7 +26,19 @@ const AddMedicine = ({ setIsAddMedicineModalOpen, refreshMedicines }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center">
-      <ToastContainer />
+      <ToastContainer
+        position="top-right"
+        autoClose={1000}
+        limit={2}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
       <div className="bg-gray-800 p-6 rounded-lg text-white shadow-lg">
         <div className="flex justify-end">
           <button onClick={() => setIsAddMedicineModalOpen(false)} className="text-red-500 hover:text-red-700">

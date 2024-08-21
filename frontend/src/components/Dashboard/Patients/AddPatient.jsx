@@ -67,7 +67,19 @@ const AddPatient = ({ onClose, onPatientAdded }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <ToastContainer />
+      <ToastContainer
+        position="top-right"
+        autoClose={1000}
+        limit={2}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
       <FaTimes className="absolute top-2 right-2 text-white cursor-pointer" onClick={onClose} />
       <div className="bg-gray-800 p-4 rounded-lg w-auto">
         <input
