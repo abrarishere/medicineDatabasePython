@@ -1,5 +1,5 @@
 import { FaSearch } from "react-icons/fa";
-import PatientMedicine from "../components/PatientMedicine";
+import PatientMedicine from "../components/patientmedicine.home/patientmedicine.home";
 import axios from "axios";
 import { useState } from "react";
 import { MagnifyingGlass } from "react-loader-spinner";

@@ -13,6 +13,9 @@ const PAT_URL =
     "https://pharmacy-medicines-edc013fd241d.herokuapp.com/patients";
 
 
+const PAT_MED_URL =
+    "https://pharmacy-medicines-edc013fd241d.herokuapp.com/patient-medicines";
+
 function deleteMedicine(id) {
     return axios.delete(`${MED_URL}/${id}`, {
         headers: {
@@ -37,4 +40,13 @@ function deletePatient(id) {
     });
 }
 
-export { deleteMedicine, deleteWard, deletePatient };
+function deletePatientMedicine(id) {
+    return axios.delete(`${PAT_MED_URL}/${id}`, {
+        headers: {
+            'x-api-key': API_KEY
+        }
+    });
+}
+
+
+export { deleteMedicine, deleteWard, deletePatient, deletePatientMedicine };

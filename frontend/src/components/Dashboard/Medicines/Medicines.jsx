@@ -1,4 +1,4 @@
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { FaPlus } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import { fetchMedicines, fetchMedicinePatients } from "../../../functions/Fetch";
@@ -72,6 +72,7 @@ const Medicines = () => {
 
   return (
     <div className="container w-full min-h-screen flex flex-col p-4">
+      <ToastContainer />
       {loading ? (
         <div className="flex items-center justify-center w-full h-full">
           <MagnifyingGlass visible={true} height="80" width="80" glassColor="#c0efff" color="#e15b64" />

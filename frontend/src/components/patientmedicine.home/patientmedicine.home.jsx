@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import AddPatientMedicine from "./PatientMedicine/AddPatientMedicine";
-import PatientDetails from "./PatientMedicine/PatientDetails";
+import AddPatientMedicine from "./AddPatientMedicine";
+import PatientDetails from "./PatientDetails";
 import { MagnifyingGlass } from "react-loader-spinner";
 
 const PatientMedicine = ({ patient }) => {

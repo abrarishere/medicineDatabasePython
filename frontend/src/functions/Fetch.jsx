@@ -24,6 +24,14 @@ function fetchMedicines() {
     });
 }
 
+function fetchMedicineById(id) {
+    return axios.get(`${MED_URL}/${id}`, {
+        headers: {
+            'x-api-key': API_KEY
+        }
+    });
+}
+
 async function fetchMedicinePatients(id) {
   try {
         return await axios.get(`${MED_URL}/${id}/patients`, {
@@ -71,12 +79,20 @@ function fetchPatients() {
     });
 }
 
-function fetchPatientMedicines(id) {
-    return axios.get(`${PAT_URL}/${id}/medicines`, {
+function fetchPatientByMRN(mrn) {
+    return axios.get(`${PAT_URL}/mr/${mrn}`, {
         headers: {
             'x-api-key': API_KEY
         }
     });
 }
 
-export { fetchMedicines, fetchPatients, fetchWards, fetchWardById, fetchMedicinePatients, fetchWardPatients, fetchPatientMedicines };
+function fetchPatientMedicines() {
+    return axios.get(`${PAT_MED_URL}`, {
+        headers: {
+            'x-api-key': API_KEY
+        }
+    });
+}
+
+export { fetchMedicines, fetchMedicineById, fetchMedicinePatients, fetchWards, fetchWardById, fetchWardPatients, fetchPatients, fetchPatientByMRN, fetchPatientMedicines };
