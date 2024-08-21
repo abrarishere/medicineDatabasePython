@@ -11,7 +11,9 @@ import AddPatient from "./AddPatient";
 
 const Patients = () => {
   const [patients, setPatients] = useState([]);
+  const [filteredPatients, setFilteredPatients] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
   const [isAddPatientModalOpen, setIsAddPatientModalOpen] = useState(false);
 
   const loadPatients = async () => {
@@ -19,12 +21,33 @@ const Patients = () => {
       setLoading(true);
       const response = await fetchPatients();
       setPatients(response.data);
+      setFilteredPatients(response.data);
     } catch {
       toast.error("Failed to fetch patients");
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadPatients();
+  }, []);
+
+  useEffect(() => {
+    const filtered = patients.filter((patient) => {
+      const query = searchQuery.toLowerCase();
+      return (
+        patient.name.toLowerCase().includes(query) ||
+        patient.gender.toLowerCase().includes(query) ||
+        patient.father_name.toLowerCase().includes(query) ||
+        patient.phone_number.toLowerCase().includes(query) ||
+        patient.mr_number.toLowerCase().includes(query) ||
+        patient.ward_id.toLowerCase().includes(query) ||
+        patient._id.toLowerCase().includes(query)
+      );
+    });
+    setFilteredPatients(filtered);
+  }, [searchQuery, patients]);
 
   const handleDoubleClick = (id) => {
     navigator.clipboard.writeText(id).then(
@@ -57,14 +80,20 @@ const Patients = () => {
     });
   };
 
-  useEffect(() => {
-    loadPatients();
-  }, []);
-
   return (
     <div className="container w-full min-h-screen flex flex-col p-4 text-white">
       <ToastContainer />
-      
+
+      <div className="flex items-center mb-4 p-2 bg-gray-700 rounded-md">
+        <input
+          type="text"
+          placeholder="Search by Name, Father Name, Phone, MR Number, Ward ID, or ID"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="border-none focus:outline-none rounded-lg px-2 py-1 bg-gray-700 text-white"
+        />
+      </div>
+
       <div className="flex justify-end w-full mb-4">
         <button
           className="bg-gray-600 text-white p-2 rounded-full hover:bg-gray-700 transition-all duration-200"
@@ -104,10 +133,10 @@ const Patients = () => {
                 </tr>
               </thead>
               <tbody className="text-sm">
-                {patients.length > 0 ? (
-                  patients.map((item, index) => (
+                {filteredPatients.length > 0 ? (
+                  filteredPatients.map((item) => (
                     <PatientCard
-                      key={index}
+                      key={item._id}
                       patient={item}
                       handleDoubleClick={handleDoubleClick}
                       handleDelete={handleDelete}

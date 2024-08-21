@@ -12,10 +12,12 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 
 const Medicines = () => {
   const [medicines, setMedicines] = useState([]);
+  const [filteredMedicines, setFilteredMedicines] = useState([]);
   const [selectedPatients, setSelectedPatients] = useState([]);
   const [isPatientDetailsModalOpen, setIsPatientDetailsModalOpen] = useState(false);
   const [isAddMedicineModalOpen, setIsAddMedicineModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const loadMedicines = async () => {
     setLoading(true);
@@ -31,6 +33,7 @@ const Medicines = () => {
         }
       }));
       setMedicines(medicinesWithPatients);
+      setFilteredMedicines(medicinesWithPatients);
     } catch {
       toast.error("Failed to fetch medicines or patients");
     } finally {
@@ -39,6 +42,18 @@ const Medicines = () => {
   };
 
   useEffect(() => { loadMedicines(); }, []);
+
+  useEffect(() => {
+    const filtered = medicines.filter(medicine => {
+      const searchLower = searchQuery.toLowerCase();
+      return (
+        medicine.medicine_name.toLowerCase().includes(searchLower) ||
+        medicine._id.toLowerCase().includes(searchLower) ||
+        medicine.quantity.toString().includes(searchLower)
+      );
+    });
+    setFilteredMedicines(filtered);
+  }, [searchQuery, medicines]);
 
   const handleInfoClick = (patients) => {
     setSelectedPatients(patients);
@@ -73,6 +88,15 @@ const Medicines = () => {
   return (
     <div className="container w-full min-h-screen flex flex-col p-4">
       <ToastContainer />
+      <div className="flex items-center mb-4 p-2 bg-gray-700 rounded-md">
+        <input
+          type="text"
+          placeholder="Search by name, ID, or date"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="border-none focus:outline-none rounded-lg px-2 py-1 w-full bg-transparent text-white"
+        />
+      </div>
       {loading ? (
         <div className="flex items-center justify-center w-full h-full">
           <MagnifyingGlass visible={true} height="80" width="80" glassColor="#c0efff" color="#e15b64" />
@@ -87,7 +111,7 @@ const Medicines = () => {
             </div>
             <h4 className="text-white text-lg font-semibold">Add Medicine</h4>
           </div>
-          {medicines.map((medicine) => (
+          {filteredMedicines.map((medicine) => (
             <MedicineCard
               key={medicine._id}
               medicine={medicine}

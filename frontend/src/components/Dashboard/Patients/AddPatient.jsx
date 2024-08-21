@@ -71,7 +71,7 @@ const AddPatient = ({ onClose, onPatientAdded }) => {
       <FaTimes className="absolute top-2 right-2 text-white cursor-pointer" onClick={onClose} />
       <div className="bg-gray-800 p-4 rounded-lg w-auto">
         <input
-          className="p-2 rounded-lg w-full mb-2 border-none focus:outline-none"
+          className="p-2 rounded-lg w-full bg-gray-900 hover:bg-gray-700 mb-2 border-none focus:outline-none"
           type="number"
           placeholder="MR Number"
           name="mrNumber"
@@ -79,7 +79,7 @@ const AddPatient = ({ onClose, onPatientAdded }) => {
           onChange={handleChange}
         />
         <input
-          className="p-2 rounded-lg w-full mb-2 border-none focus:outline-none"
+          className="p-2 rounded-lg w-full bg-gray-900 hover:bg-gray-700 mb-2 border-none focus:outline-none"
           type="text"
           placeholder="Name"
           name="name"
@@ -87,7 +87,7 @@ const AddPatient = ({ onClose, onPatientAdded }) => {
           onChange={handleChange}
         />
         <input
-          className="p-2 rounded-lg w-full mb-2 border-none focus:outline-none"
+          className="p-2 rounded-lg w-full bg-gray-900 hover:bg-gray-700 mb-2 border-none focus:outline-none"
           type="text"
           placeholder="Father Name"
           name="fatherName"
@@ -95,7 +95,7 @@ const AddPatient = ({ onClose, onPatientAdded }) => {
           onChange={handleChange}
         />
         <select
-          className="p-2 rounded-lg w-full mb-2 border-none focus:outline-none"
+          className="p-2 rounded-lg w-full bg-gray-900 hover:bg-gray-700 mb-2 border-none focus:outline-none"
           name="gender"
           value={formData.gender} // Controlled input
           onChange={handleChange}
@@ -106,7 +106,7 @@ const AddPatient = ({ onClose, onPatientAdded }) => {
           <option value="Other">Other</option>
         </select>
         <input
-          className="p-2 rounded-lg w-full mb-2 border-none focus:outline-none"
+          className="p-2 rounded-lg w-full bg-gray-900 hover:bg-gray-700 mb-2 border-none focus:outline-none"
           type="number"
           placeholder="Age"
           name="age"
@@ -114,7 +114,7 @@ const AddPatient = ({ onClose, onPatientAdded }) => {
           onChange={handleChange}
         />
         <select
-          className="p-2 rounded-lg w-full mb-2 border-none focus:outline-none"
+          className="p-2 rounded-lg w-full bg-gray-900 hover:bg-gray-700 mb-2 border-none focus:outline-none"
           name="wardId"
           value={formData.wardId} // Controlled input
           onChange={handleChange}
@@ -127,14 +127,14 @@ const AddPatient = ({ onClose, onPatientAdded }) => {
           ))}
         </select>
         <input
-          className="p-2 rounded-lg w-full mb-2 border-none focus:outline-none"
+          className="p-2 rounded-lg w-full bg-gray-900 hover:bg-gray-700 mb-2 border-none focus:outline-none"
           type="number"
           placeholder="Phone Number"
           name="phoneNumber"
           value={formData.phoneNumber} // Controlled input
           onChange={handleChange}
         />
-        <button className="bg-blue-500 text-white p-2 rounded-lg w-full mb-2" onClick={handleSubmit} disabled={loading}>
+        <button className="bg-blue-500 text-white p-2 rounded-lg w-full hover:bg-gray-700 mb-2" onClick={handleSubmit} disabled={loading}>
           {loading ? <MagnifyingGlass height="20" width="20" ariaLabel="loading" /> : "Add Patient"}
         </button>
       </div>

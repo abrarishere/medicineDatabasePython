@@ -1,6 +1,6 @@
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { FaPlus } from "react-icons/fa";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { fetchWards, fetchWardPatients } from "../../../functions/Fetch";
 import PatientDetails from "../Commons/PatientDetails";
 import { deleteWard } from "../../../functions/Delete";
@@ -12,13 +12,14 @@ import AddWard from "./AddWard";
 
 const Wards = () => {
   const [wards, setWards] = useState([]);
+  const [filteredWards, setFilteredWards] = useState([]);
   const [selectedPatients, setSelectedPatients] = useState([]);
-  const [isPatientDetailsModalOpen, setIsPatientDetailsModalOpen] =
-    useState(false);
+  const [isPatientDetailsModalOpen, setIsPatientDetailsModalOpen] = useState(false);
   const [isAddWardModalOpen, setIsAddWardModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const loadWards = async () => {
+  const loadWards = useCallback(async () => {
     setLoading(true);
     try {
       const { data: wardsData } = await fetchWards();
@@ -32,23 +33,36 @@ const Wards = () => {
               patients: patientsData,
             };
           } catch (error) {
-            if (error.response?.status === 404)
+            if (error.response?.status === 404) {
               return { ...ward, patientCount: 0, patients: [] };
+            }
             throw error;
           }
-        }),
+        })
       );
       setWards(wardsWithPatientCounts);
-    } catch {
+    } catch (error) {
       toast.error("Failed to fetch wards or patients");
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     loadWards();
-  }, []);
+  }, [loadWards]);
+
+  useEffect(() => {
+    const filtered = wards.filter((ward) => {
+      const searchLower = searchQuery.toLowerCase();
+      return (
+        ward.ward_name.toLowerCase().includes(searchLower) ||
+        ward._id.toLowerCase().includes(searchLower) ||
+        ward.patientCount.toString().includes(searchLower)
+      );
+    });
+    setFilteredWards(filtered);
+  }, [searchQuery, wards]);
 
   const handleInfoClick = (patients) => {
     setSelectedPatients(patients);
@@ -93,6 +107,16 @@ const Wards = () => {
 
   return (
     <div className="container w-full min-h-screen flex flex-col text-white p-4">
+      <ToastContainer />
+      <div className="flex items-center mb-4 p-2 bg-gray-700 rounded-md">
+        <input
+          type="text"
+          placeholder="Search by name, ID, or patient count"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="border-none focus:outline-none rounded-lg px-2 py-1 w-full bg-transparent text-white"
+        />
+      </div>
       {loading ? (
         <div className="flex items-center justify-center w-full h-full">
           <MagnifyingGlass
@@ -115,7 +139,7 @@ const Wards = () => {
               </div>
               <h2 className="text-md font-semibold">Add Ward</h2>
             </div>
-            {wards.map(({ _id, ward_name, patientCount, patients }) => (
+            {filteredWards.map(({ _id, ward_name, patientCount, patients }) => (
               <WardCard
                 key={_id}
                 wardId={_id}
