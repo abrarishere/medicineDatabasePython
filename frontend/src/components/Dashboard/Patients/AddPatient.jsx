@@ -93,7 +93,7 @@ const AddPatient = ({ onClose, onPatientAdded }) => {
         <input
           className="p-3 rounded-md w-full bg-gray-900 hover:bg-gray-700 mb-3 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
           type="number"
-          placeholder="MR Number"
+          placeholder="MR Number (Optional)"
           name="mrNumber"
           value={formData.mrNumber}
           onChange={handleChange}
