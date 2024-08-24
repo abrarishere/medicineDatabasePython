@@ -26,7 +26,7 @@ const PatientMedicine = ({ patient }) => {
   const url_medicines =
     `${BASE_URL}/medicines`;
   const url_patient_medicines =
-    `${BASE_URL}/patient-medicines`;
+    `${BASE_URL}/patient-medicines/create`;
 
   // Fetch ward data based on patient's ward_id
   useEffect(() => {
