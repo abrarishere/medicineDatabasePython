@@ -34,8 +34,19 @@ After installing the above, you can run the project by following these steps:
 
 3. Run `npm install` in the backend directory.
 4. Run `npm install` in the frontend directory.
-5. Run `npm run dev` in the backend directory to run the project (You need to run the backend first).
-6. Run `npm run dev` in the frontend directory to run the project (You need to run the frontend after running the backend).
+5. Create a `.env` file in the backend directory and add the following:
+```
+MONGO_URI=your_mongo_uri
+PORT=5000
+API_KEY=your_app_key
+```
+Also, In the frontend directory, create a `.env` file and add the following:
+```
+VITE_BASE_URL=http://localhost:5000
+VITE_API_KEY=your_app_key
+```
+6. Run `npm run dev` in the backend directory to run the project (You need to run the backend first).
+7. Run `npm run dev` in the frontend directory to run the project (You need to run the frontend after running the backend).
 
 ## Contributing
 Feel free to contribute to the project. You can contribute by:
