@@ -34,7 +34,8 @@ const AddPatient = ({ onClose, onPatientAdded }) => {
     e.preventDefault();
     setLoading(true);
 
-    const { mrNumber, name, fatherName, gender, age, wardId, phoneNumber } = formData;
+    const { mrNumber, name, fatherName, gender, age, wardId, phoneNumber } =
+      formData;
 
     if (!name || !fatherName || !gender || !age || !wardId || !phoneNumber) {
       toast.error("Please fill all the fields");
@@ -80,36 +81,43 @@ const AddPatient = ({ onClose, onPatientAdded }) => {
         pauseOnHover
         theme="dark"
       />
-      <FaTimes className="absolute top-2 right-2 text-white cursor-pointer" onClick={onClose} />
-      <div className="bg-gray-800 p-4 rounded-lg w-auto">
+      <div className="bg-gray-800 p-6 rounded-lg w-auto max-w-md mx-4">
+        <div className="flex justify-end items-center mb-4">
+          <FaTimes
+            className="text-white cursor-pointer bg-gray-800 p-2 rounded-full hover:bg-red-600 transition-colors"
+            onClick={onClose}
+            size={32}
+            aria-label="Close"
+          />
+        </div>
         <input
-          className="p-2 rounded-lg w-full bg-gray-900 hover:bg-gray-700 mb-2 border-none focus:outline-none"
+          className="p-3 rounded-md w-full bg-gray-900 hover:bg-gray-700 mb-3 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
           type="number"
           placeholder="MR Number"
           name="mrNumber"
-          value={formData.mrNumber} // Controlled input
+          value={formData.mrNumber}
           onChange={handleChange}
         />
         <input
-          className="p-2 rounded-lg w-full bg-gray-900 hover:bg-gray-700 mb-2 border-none focus:outline-none"
+          className="p-3 rounded-md w-full bg-gray-900 hover:bg-gray-700 mb-3 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
           type="text"
           placeholder="Name"
           name="name"
-          value={formData.name} // Controlled input
+          value={formData.name}
           onChange={handleChange}
         />
         <input
-          className="p-2 rounded-lg w-full bg-gray-900 hover:bg-gray-700 mb-2 border-none focus:outline-none"
+          className="p-3 rounded-md w-full bg-gray-900 hover:bg-gray-700 mb-3 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
           type="text"
           placeholder="Father Name"
           name="fatherName"
-          value={formData.fatherName} // Controlled input
+          value={formData.fatherName}
           onChange={handleChange}
         />
         <select
-          className="p-2 rounded-lg w-full bg-gray-900 hover:bg-gray-700 mb-2 border-none focus:outline-none"
+          className="p-3 rounded-md w-full bg-gray-900 hover:bg-gray-700 mb-3 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
           name="gender"
-          value={formData.gender} // Controlled input
+          value={formData.gender}
           onChange={handleChange}
         >
           <option value="">Select Gender</option>
@@ -118,17 +126,17 @@ const AddPatient = ({ onClose, onPatientAdded }) => {
           <option value="Other">Other</option>
         </select>
         <input
-          className="p-2 rounded-lg w-full bg-gray-900 hover:bg-gray-700 mb-2 border-none focus:outline-none"
+          className="p-3 rounded-md w-full bg-gray-900 hover:bg-gray-700 mb-3 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
           type="number"
           placeholder="Age"
           name="age"
-          value={formData.age} // Controlled input
+          value={formData.age}
           onChange={handleChange}
         />
         <select
-          className="p-2 rounded-lg w-full bg-gray-900 hover:bg-gray-700 mb-2 border-none focus:outline-none"
+          className="p-3 rounded-md w-full bg-gray-900 hover:bg-gray-700 mb-3 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
           name="wardId"
-          value={formData.wardId} // Controlled input
+          value={formData.wardId}
           onChange={handleChange}
         >
           <option value="">Select Ward</option>
@@ -139,15 +147,23 @@ const AddPatient = ({ onClose, onPatientAdded }) => {
           ))}
         </select>
         <input
-          className="p-2 rounded-lg w-full bg-gray-900 hover:bg-gray-700 mb-2 border-none focus:outline-none"
+          className="p-3 rounded-md w-full bg-gray-900 hover:bg-gray-700 mb-3 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
           type="number"
           placeholder="Phone Number"
           name="phoneNumber"
-          value={formData.phoneNumber} // Controlled input
+          value={formData.phoneNumber}
           onChange={handleChange}
         />
-        <button className="bg-blue-500 text-white p-2 rounded-lg w-full hover:bg-gray-700 mb-2" onClick={handleSubmit} disabled={loading}>
-          {loading ? <MagnifyingGlass height="20" width="20" ariaLabel="loading" /> : "Add Patient"}
+        <button
+          className="bg-blue-600 text-white p-3 rounded-md w-full hover:bg-blue-700 transition-colors disabled:bg-blue-400 disabled:cursor-not-allowed"
+          onClick={handleSubmit}
+          disabled={loading}
+        >
+          {loading ? (
+            <MagnifyingGlass height="20" width="20" ariaLabel="loading" />
+          ) : (
+            "Add Patient"
+          )}
         </button>
       </div>
     </div>
