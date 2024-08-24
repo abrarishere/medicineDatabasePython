@@ -1,20 +1,21 @@
 import axios from "axios";
 
 const API_KEY = import.meta.env.VITE_API_KEY;
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const MED_URL =
-    "https://pharmacy-medicines-edc013fd241d.herokuapp.com/medicines";
+  `${BASE_URL}/medicines`;
 
 const WARD_URL =
-    "https://pharmacy-medicines-edc013fd241d.herokuapp.com/wards";
+  `${BASE_URL}/wards`;
 
 
 const PAT_URL =
-    "https://pharmacy-medicines-edc013fd241d.herokuapp.com/patients";
+  `${BASE_URL}/patients`;
 
 
 const PAT_MED_URL =
-    "https://pharmacy-medicines-edc013fd241d.herokuapp.com/patient-medicines";
+  `${BASE_URL}/patient-medicines`;
 
 function deleteMedicine(id) {
     return axios.delete(`${MED_URL}/${id}`, {

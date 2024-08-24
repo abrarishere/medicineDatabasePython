@@ -19,12 +19,14 @@ const PatientMedicine = ({ patient }) => {
   ]);
   const [submitting, setSubmitting] = useState(false);
   const apiKey = import.meta.env.VITE_API_KEY;
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
   const url_wards =
-    "https://pharmacy-medicines-edc013fd241d.herokuapp.com/wards";
+    `${BASE_URL}/wards`;
+    
   const url_medicines =
-    "https://pharmacy-medicines-edc013fd241d.herokuapp.com/medicines";
+    `${BASE_URL}/medicines`;
   const url_patient_medicines =
-    "https://pharmacy-medicines-edc013fd241d.herokuapp.com/patient-medicines/create";
+    `${BASE_URL}/patient-medicines`;
 
   // Fetch ward data based on patient's ward_id
   useEffect(() => {

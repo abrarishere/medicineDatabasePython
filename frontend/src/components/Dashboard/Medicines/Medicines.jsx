@@ -34,8 +34,9 @@ const Medicines = () => {
       }));
       setMedicines(medicinesWithPatients);
       setFilteredMedicines(medicinesWithPatients);
-    } catch {
+    } catch (error) {
       toast.error("Failed to fetch medicines or patients");
+      console.error(JSON.stringify(error));
     } finally {
       setLoading(false);
     }

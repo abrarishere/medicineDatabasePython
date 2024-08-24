@@ -1,16 +1,17 @@
 import axios from "axios";
 
 const API_KEY = import.meta.env.VITE_API_KEY;
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const MED_URL =
-    "https://pharmacy-medicines-edc013fd241d.herokuapp.com/medicines/create";
+    `${BASE_URL}/medicines/create`;
 
 const WARD_URL =
-    "https://pharmacy-medicines-edc013fd241d.herokuapp.com/wards/create";
+  `${BASE_URL}/wards/create`;
 
 
 const PAT_URL =
-    "https://pharmacy-medicines-edc013fd241d.herokuapp.com/patients/create";
+  `${BASE_URL}/patients/create`;
 
 
 function addMedicine(data) {

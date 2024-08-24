@@ -19,7 +19,8 @@ const AddMedicine = ({ setIsAddMedicineModalOpen, refreshMedicines }) => {
         await refreshMedicines();
         setIsAddMedicineModalOpen(false);
       }
-    } catch {
+    } catch (error) {
+      console.log(error);
       toast.error('Error adding medicine');
     }
   };

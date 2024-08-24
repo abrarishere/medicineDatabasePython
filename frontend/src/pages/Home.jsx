@@ -12,7 +12,8 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
 
   const apiKey = import.meta.env.VITE_API_KEY;
-  const url = "https://pharmacy-medicines-edc013fd241d.herokuapp.com/patients/mr";
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+  const url = `${BASE_URL}/patients/mr`;
 
   const getData = async (search) => {
     if (!search.trim()) {
