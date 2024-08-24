@@ -88,6 +88,14 @@ function fetchPatientByMRN(mrn) {
     });
 }
 
+function fetchUniquePatientMedicines(id) {
+    return axios.get(`${PAT_URL}/${id}/medicines`, {
+        headers: {
+            'x-api-key': API_KEY
+        }
+    });
+}
+
 function fetchPatientMedicines() {
     return axios.get(`${PAT_MED_URL}`, {
         headers: {
@@ -96,4 +104,4 @@ function fetchPatientMedicines() {
     });
 }
 
-export { fetchMedicines, fetchMedicineById, fetchMedicinePatients, fetchWards, fetchWardById, fetchWardPatients, fetchPatients, fetchPatientByMRN, fetchPatientMedicines };
+export { fetchMedicines, fetchMedicineById, fetchMedicinePatients, fetchWards, fetchWardById, fetchWardPatients, fetchPatients, fetchPatientByMRN, fetchUniquePatientMedicines, fetchPatientMedicines };

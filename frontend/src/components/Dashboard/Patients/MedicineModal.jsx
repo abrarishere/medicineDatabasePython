@@ -12,7 +12,7 @@ const MedicineModal = ({ isOpen, onClose, medicines }) => {
           <ul>
             {medicines.map((medicine, index) => (
               <li key={index} className="mb-2">
-                {medicine.medicine_name} - {medicine.quantity}
+                {medicine.medicine_name || 'name'} - {medicine.quantity}
               </li>
             ))}
           </ul>

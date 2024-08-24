@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { fetchWardById, fetchPatientMedicines } from "../../../functions/Fetch";
+import { fetchWardById, fetchUniquePatientMedicines } from "../../../functions/Fetch";
 import MedicineModal from "./MedicineModal";
 import { FaTrash } from "react-icons/fa";
 
@@ -22,7 +22,7 @@ const PatientCard = ({ patient, handleDoubleClick, handleDelete }) => {
   const getPatientMedicines = async () => {
     setLoading(true);
     try {
-      const response = await fetchPatientMedicines(patient._id);
+      const response = await fetchUniquePatientMedicines(patient._id);
       setPatientMedicines(response.data);
     } catch (error) {
       console.log(error.message);
