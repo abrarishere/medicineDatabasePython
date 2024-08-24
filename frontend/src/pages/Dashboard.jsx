@@ -40,7 +40,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="container w-full min-h-screen flex flex-col items-center bg-[#141414] text-white">
+    <div className="w-screen min-h-screen flex flex-col items-center bg-[#141414] text-white overflow-x-hidden">
       <ToastContainer
         position="top-right"
         autoClose={1000}
